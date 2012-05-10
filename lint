@@ -1,0 +1,20 @@
+#!/bin/sh
+
+GREP="grep -Hn --color=always"
+
+$GREP "SAN's" *.tex
+#$GREP "IOMeter" *.tex
+#$GREP "IOmeter" *.tex
+$GREP "VIC" *.tex
+$GREP "MIC" *.tex       #should be MCC
+$GREP "CIFs" *.tex
+$GREP "cpu" *.tex
+$GREP "IOps" *.tex
+$GREP "VM's" *.tex
+$GREP "I/O" *.tex
+$GREP "modelling" *.tex
+$GREP "vmkernel" *.tex
+$GREP -i "[^\\]dede" *.tex | grep -v '\\newcommand'
+$GREP " ~\\|^~" *.tex
+#$GREP "[0-9][GMK][^B]" *.tex
+exit 0
