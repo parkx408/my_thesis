@@ -1,0 +1,18 @@
+%\begin{tikzpicture}[show background grid, auto]
+\begin{tikzpicture}[auto]
+\node[ellipse,
+			%cylinder,
+			%shape border rotate = 90,
+			%aspect = 0.25,
+			minimum height = 2cm,
+			draw] (Storage) {
+				Storage System
+			}; 
+\draw (Storage.north west) -- (-2,1.5) -- (-2.5,1.5) node[left]{Flexibility};
+\draw (Storage.south west) -- (-2,-1.5) -- (-2.5,-1.5) node[left]{Capacity};
+\draw (Storage.north east) -- (2,1.5) -- (2.5,1.5) node[right]{Power};
+\draw (Storage.south east) --(2,-1.5) -- (2.5,-1.5) node[right]{Reliability};
+\draw (Storage.south) -- (0,-1.5)	node[below]{Performance};
+\draw[-triangle 90] (-0.7, 2)node[above]{Store} -- (Storage.110);
+\draw[-triangle 90] (Storage.70) -- (0.7, 2)node[above]{Load};
+\end{tikzpicture}
