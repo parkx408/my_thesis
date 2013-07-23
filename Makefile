@@ -1,14 +1,16 @@
-RUBBER=rubber -Wrefs -Wmisc 
+RUBBER=rubber -Wrefs -Wmisc
+BIBTEX=bibtex
+#RUBBER=rubber -Wall
 
 pdf: thesis.pdf
 .PHONY: pdf
 
 thesis.pdf:
 	./lint
-	$(RUBBER) --pdf thesis_phd.tex
+	$(RUBBER) -v --pdf --force thesis
 .PHONY: thesis.pdf
 
 clean:
-	$(RUBBER) --pdf --clean thesis_phd.tex
+	$(RUBBER) --clean --pdf thesis.tex
 .PHONY: clean
 

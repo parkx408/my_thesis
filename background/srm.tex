@@ -1,0 +1,87 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% srm.tex: Storage Consolidation and Resource Management.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Storage Consolidation and Resource Management}
+\label{bg_srm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Motivation 
+%The cloud computing paradigm shift is built on virtualization.  
+%Most IT organizations and cloud service providers have deployed virtualized data centers in an effort to consolidate workloads, streamline management, reduce costs and increase utilization.  
+%Still, overall costs for storage management have remained stubbornly high.
+%Over its lifetime, managing storage is often four times more expensive
+%than its initial procurement~\cite{hds-storage-tco}.  The annualized
+%total cost of storage for virtualized systems is often three times
+%more than server hardware and seven times more than networking-related
+%assets~\cite{burton-group-cost-model}.
+
+A key enabler for virtualization adoption is ability for a virtual
+machine (VM) to be efficiently migrated across compute hosts at run
+time~\cite{clark:2005, wood:2007, nelson:2005}.
+%Consequently, VM live migration has been utilized to perform active
+%performance management in commercial products for some
+%time~\cite{drs-whitepaper}.  Similarly, virtualization offers
+%unprecedented dynamic control over storage resources, allowing both
+%VMs and their associated virtual disks to be placed dynamically and
+%migrated seamlessly around the physical
+%infrastructure~\cite{mashtizadeh2011design}.
+
+%However, it is well-known that storage data associated with a VM is
+%much harder to migrate compared to CPU/Memory state.  Virtual disk
+%migration time is typically a function of virtual disk size, size of
+%the working set, source and destination storage state and capability,
+%etc~\cite{mashtizadeh2011design}.  Migration can take anywhere from
+%tens of minutes to a few hours depending on those parameters.
+%
+%Given the high expense of data migration, intelligent and automatic
+%storage performance management has been a relevant but difficult
+%research problem~\cite{basil, pesto}.  Virtualized environments can be
+%extremely complex, with diverse and mixed workloads sharing a
+%collections of heterogeneous storage devices.  Such environments are
+%also dynamic, as new devices, hardware upgrades, and other
+%configuration changes are rolled out. Our goal of supporting
+%heterogeneity is critical since data center operators want to keep the
+%flexibility of buying the cheapest hardware available at any given
+%time.
+%
+%%% Problem 
+%The key to automated management of storage lies in the ability to
+%predict the performance of a workload on a given storage system.
+%Without it, an experienced user must determine manually if migrating a
+%virtual disk is beneficial, a complicated task.  Previous
+%work~\cite{basil, pesto} has relied on a heuristic model derived
+%from empirical data.  
+%
+%When considering automated load balancing, the simplest approach would be to observe utilization of all data stores and offload a virtual disk from the most heavily loaded data store to the least heavily loaded data store.
+%
+%There are several problems with this approach but the main problem is
+%the unpredictability of the benefit of the moves. In fact, there
+%exists no guarantee that the moves will even be beneficial. Storage
+%systems do not react to different workloads in a homogeneous manner. A
+%workload may stress one storage system significantly more than the
+%other depending on the storage system configurations and
+%optimizations. 
+%
+%The second problem is the workload interference. 
+%When multiple workloads are placed into a single storage systems, their effect on the storage system is not simply added. While some workloads can be placed onto a single storage system and work with minimum interference, some experience huge performance hits. 
+%
+%Romano prediction model takes into account this heterogeneous response of storage systems and the interference between workloads improving the prediction accuracy by over 80\%. Once these problems are recognized, it is obvious that the load balancing is no longer a bin packing problem as suggested by previous works~\cite{basil, pesto, vectordot}.
+%Therefore, we introduce a new load balancing algorithm based on the simulated annealing~\cite{kirkpatrick1983optimization} that optimizes the overall performance in a stochastic manner.
+%We show that Romano is capable of reducing the performance variance by 82\% and reduce the maximum latency observed by 78\%. 
+%
+%Romano makes following contributions.
+%\begin{description}
+%\item[Accuracy] Romano residuals are reduced 80\% on average compared
+%  to previous techniques.  Furthermore, the residual is unbiased and
+%  does not propagate with recursive predictions.
+%\item[Robustness] Romano is able to specify the prediction interval which satisfies a specified confidence level.
+%We show that the resulting prediction interval captures real performance with surprising accuracy.
+%\item[Flexibility] Different storage systems have different response
+%  characteristics to different workloads. Romano captures these differences by quantifying the effect of workload characteristics as well as the interactions of those characteristics on a given storage system.
+%\item[Optimization] Romano load balancing algorithm avoids system state to be stuck at local optimum by identifying a global pseudo-optimum state through recursive prediction. At the same time, it also ensures that the most beneficial migrations are performed first to maximize the benefit. 
+%\end{description}
+%
+%We have prototyped \romano on VMware's ESXi and vCenter Server
+%products.  Minimal changes were made to the ESXi hypervisor to collect
+%additional stats for vCenter where the core of \romano is implemented.
+% 
+ 

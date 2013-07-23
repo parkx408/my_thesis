@@ -1,0 +1,25 @@
+\begin{tikzpicture}[auto,node distance=2cm]
+    % Place nodes
+    \node [block, node distance=4cm] (init) {Parameter Extraction};
+    \node [cloud, left of=init, node distance=6cm] (manual) {Benchmark Manual};
+    \node [block, below of=init] (lvl) {Parameter Level Decision};
+    \node [block, below of=manual] (PB) {PB Experiment Generation};
+    \node [cloud, below of=lvl] (p_list) {Parameter List};
+    \node [cloud, below of=PB] (PB_table) {PB Table};
+    \node [block, below of=p_list] (input) {Benchmark Input Parameter Generation};
+    \node [block, left of=input, node distance=6cm] (run) {Run Benchmarks};
+    \node [cloud, below of=run](result){Results};
+    \node [block, right of=result, node distance = 6cm](eval){Effect Estimation};
+    % Draw edges
+    \path [line] (manual) -- (init);
+    \path [line] (init) -- (lvl);
+    \path [line] (init) -- (PB);
+    \path [line] (PB) -- (PB_table);
+    \path [line] (lvl) -- (p_list);
+    \path [line] (p_list) -- (input);
+    \path [line] (PB_table) -- (input);
+    \path [line] (input) -- (run);
+    \path [line] (run) -- (result);
+    \path [line] (result) -- (eval);
+    \path [line] (input) -- (eval);
+\end{tikzpicture}

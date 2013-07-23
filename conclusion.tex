@@ -4,5 +4,37 @@
 \chapter{Conclusion and Discussion}
 \label{conclusion_chapter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We have presented Romano, a load balancing framework for virtual disks
+on heterogeneous storage systems. The kernel of Romano is a performance
+predictor given a set of parameters that characterize the workloads and
+the storage devices. We have shown that Romano can outperform
+previous systems with same goals by up to 80\% in prediction
+accuracy. This increased accuracy results in 78\% reduction in maximum
+latency observed and 82\% reduction in variance while load balancing.
 
+At a deeper level, Romano contributes a recognition that there is
+inherent noise in storage system performance that is not easily dealt
+with. Romano is capable of capturing this noise within the prediction
+interval. As more data is gathered there is higher confidence that the
+prediction interval will contain the measured latency. 
+
+Another key contribution of Romano is quantification of effect of
+various workload characteristics and their interaction on heterogeneous
+storage devices. 
+We have shown that the performance differences between data stores cannot be described with a single number. More specifically, we have shown that the storage performance must be described in terms of the workload.
+
+The last contribution follows the second contribution. Since the performance of storage systems effectively change with the workload, the load balancing problem is no longer a bin-packing problem as previously believed. 
+Therefore we present a probabilistic approach to finding a pseudo-optimal mapping of workloads to the data stores. 
+It is important to mention that probabilistic approach is only used to find the final state of the system and the moves are actually made greedily to speed up the convergence and minimize the number of moves that has to be made.
+
+We believe that Romano not only provides means for more efficient load
+balancing but also in many other areas such as QoS management, power management and performance tunning in tiered storage.
+
+Whereas Romano raises the bar on the accuracy of practical modeling
+techniques, there remain ample opportunities for improvements in
+future work. Better interference modeling between workloads when they
+are placed on same data store is one such area where we are making
+good progress. Another work in progress is to come up with a better
+set of workload characteristics such that the workload description can
+be more complete.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

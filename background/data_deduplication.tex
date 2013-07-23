@@ -1,0 +1,30 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%data_deduplication.tex: Describes Data Deduplication in Backup Applications.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data Deduplication in Backup Applications}
+\label{bg_dedup}
+Data deduplication provides a means to efficiently remove redundancies from large datasets. 
+This process is made possible by first dividing up the data into segments and representing each segment with a much smaller hash value. 
+A redundant segment of data is then easily identified through a hash table lookup. 
+The efficiency of the process comes at the cost of possible data loss through hash collisions, thoug it is understood that the collision probability is negligible compared to the soft error rate of the storage system if an appropriate hash function is used\cite{Aronovich:2009:DSB:1534530.1534539, Zhu:2008:ADB:1364813.1364831, bobbarjung2006improving, Muthitacharoen:2001:LNF:502059.502052}. 
+Another performance factor is the granularity of compression which is limited to the size of duplicate segments. 
+Two segments that are off by a single bit will result in no compression.    
+
+%%Problem 
+Despite these costs, data deduplication has steadily gained its place in backup\cite{Meister:2009:MCD:1534530.1534541,Lillibridge:2009:SIL:1525908.1525917,Zhu:2008:ADB:1364813.1364831}, archive\cite{you2005deep} and virtual machine storage solutions\cite{smith2008izo, Jin:2009:EDV:1534530.1534540,clements2009decentralized} due to its potentially huge reduction in storage space and IO elimination. 
+However, as more and more systems opt to take advantage of data deduplication techniques, the variability in performance is becoming an issue. 
+The cause of this variation can be catagorized into two factors, \emph{systemic variation} and \emph{input variation}. 
+Systemic variation is caused by the use of different algorithms and techniques as well as the underlying hardware deployed in the deduplication systems. 
+The input variation is caused by different characteristics of the input datasets. 
+The systemic variation is critical from the deduplication system designers' and vendors' perspectives since it allows them to compare two systems directly. 
+However, the input variation is typically more critical from the custumer's perspective when evaluating the potential benefits of data deduplication for different types of datasets.
+
+Current metrics for characterizing the datasets for data deduplication are overly simplified and often inaccurate. For example, the compression ratio ($\mathit{CR}$) is typically estimated using the \emph{average data change rate} ($\overline{\mathit{dcr}}$), which is the percentage of data change. Let $R$ be the required retention period. Assuming a full backup per unit time, the compression ratio is simply:
+\begin{equation}\label{dcr_est}
+\mathit{CR}= \frac{\mathrm{Compressed\ Size}}{\mathrm{Uncompressed\ Size}}=\frac{1+(R-1)\cdot \overline{\mathit{dcr}}}{R}.
+\end{equation}
+This model provides a simple estimation of the ompression ratio but it can also be very inaccuarate. We observed over 35\% error using the $\overline{\mathit{dcr}}$ to charaterize one of our datasets. One of our main contributions is providing a new set of metrics and models that allow much more accurate compression performance predictions to be made. In five out of six cases we test, the error reduction was over 50\% when compared with the $\overline{\mathit{dcr}}$ method.
+
+The main performance metrics for data deduplication systems are the compression ratio and the read/write throughput. While the latency could also be an issue for virtual machines, it can be mostly masked by high level caching and prefetching mechanisms. Unless specified otherwise, we use the term \emph{performance} to represent both the throughput and compression together.
+
+The throughput of the system is heavily dependent on both system and input factors. Thus, it is difficult to determine if one dataset outperforms the other in terms of throughput. However, there are features of datasets that are likely to benefit throughput in most systems. One obvious one is the compression ratio itself. A highly compressable dataset has lower IO requirements which in turn improves the throughput in most systems. The compression ratio is the most influential factor in determining the throughput. However, there are also other factors, such as spatial locality of the data segments and bursty arrival rates, which we examine in this paper.

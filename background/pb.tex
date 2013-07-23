@@ -1,0 +1,27 @@
+\section{Plackett-Burman designs}
+\label{BG_PB}
+The \emph{Plackett-Burman design} (PB design)~\cite{plackett:1946} minimizes the number of experiments required to estimate the effect of independent variables on the dependent variable. 
+Basically, it estimates the effect of single input parameter on an output in such a way that variance of this effect due to other inputs is minimized. 
+The effect is an approximation of the full factorial design but with linear complexity. 
+Required assumption is that higher order interaction effects are negligible. 
+PB design has been widely used to evaluate effect of benchmark input parameters on processor performance~\cite{yi:2003} and database query processing performance~\cite{debnath:2008}, for example.
+
+Formally, the main effect  $m_1$ of input variable $x_1$ on output $y$ is defined to be 
+\begin{equation}
+m_1 = \frac{[\sum f(x'_1, x_2, ..., x_n)-\sum f(\overline{x_1}, x_2, ..., x_n)]}{2^n}
+\end{equation}
+where $x'_1$ represents some extreme value of $x_1$ and $\overline{x_1}$ represents the mean of $x_1$. 
+$f$ is an unknown function which maps all $x_i$ to $y$. 
+The summation is carried out for all possible combination of $x_2$ through $x_n$. 
+Hence, the effect of $x_i$ is simply maximum deviation of $y$ given maximum deviation of $x_i$. 
+
+The goal of PB design is to estimate all $m_i$s such that
+\begin{equation}
+S=\sum\limits_j (\widehat{y_j}-M-a_{j1}m_1-a_{j2}m_{2}...-a_{jn}m_n+\alpha)^2
+\end{equation}
+is minimized. 
+$\widehat{y_j}$ is simply the sampled value of $y$ at time $j$ and $M$ is mean value of all $y_j$s. 
+$a_{ji}$ takes value $\pm 1$ based on whether the $x_i$ had positive or negative effect on $\widehat{y_j}$. 
+$\alpha$ is the higher order effects which are ignored based on the observations made by Fisher~\cite{fisher:1936}. 
+Since there are $n$ values to be estimated, the minimum number of experiments required to derive a unique set of $m_i$ is $n+1$. 
+Plackett and Burman proved that $S$ can indeed be minimized using $\lceil(n+1)/4\rceil*4$ experiments assuming $\alpha = 0$~\cite{plackett:1946}.

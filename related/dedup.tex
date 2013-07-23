@@ -1,0 +1,12 @@
+\section{Data Deduplication}
+\label{DD}
+
+The workload presented in typical deduplication systems paper are either from a privately accessible systems\cite{clements:2009, Rhea:2008, manber:1994, Aronovich:2009, Lillibridge:2009, Zhu:2008} or a relatively small dataset of specific type in public domain\cite{Storer:2008, kruus,eshghi:2005}. 
+However, either techniques allow a direct comparison of different systems if the dataset under evaluation is completely different or if it only covers a dataset of a particular characteristics.
+
+There have been few work in trying to statistically characterize the input dataset to various benchmark programs\cite{Eeckhout:2003, Yi:2002, Hsu:2002}. 
+However, these papers concentrate on generic sub-setting of dataset so that different characteristics of application is explored statistically hence lacking in accuracy when it comes to predicting exact performance variances.
+
+Numerous works have also been applied in filesystem activities and its contents\cite{douceur1999large, Leung:2008:MAL:1404014.1404030, Douceur:1999:LSF:301464.301480} with one paper using a simple statistical analysis to characterize a filesystem impression\cite{ Agrawal:2009:GRI:1629080.1629086}. 
+While these approaches all reveal some interesting intuitions of how we use storage systems, the scope is too generic to be neither accurate or simple enough to be applied in real systems. 
+More specific workload analysis have been targeted to SSDs\cite{ soundararajan2010extending} and we use some of their approach in out analysis.
