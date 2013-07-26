@@ -1,0 +1,58 @@
+\section{Analysis of Variance(ANOVA)}
+
+\emph{ANOVA} is a widely used technique to separate the total
+variation ($\mathit{SST}$) in a set of measurements into a component
+due to random fluctuations ($\mathit{SSE}$) and a component due to
+actual difference among the alternatives
+($\mathit{SSA}$)~\cite{lilja:2005}.
+
+Intuitively, we can assume that the size of the actual component is
+$0$ and calculate the probability of this assumption being true.
+If the assumption is highly unlikely to be true than we can reject
+this assumption. This assumption is typically called the \emph{null
+  hypothesis} and the procedure is called \emph{hypothesis testing}.
+Given $n$ experiments for each of $k$ alternatives, total variation is
+sum of squares of difference between each of $n*k$ experiments and
+overall mean, $\overline{y}$. Similarly, the variation due to the
+effects of the alternatives is the sum of squares of the differences
+between the mean of the measurements for each alternatives and overall
+mean. Lastly, the variation due to errors is the sum of the squares
+of the differences between the individual measurements and the mean of
+all measurements for a particular alternative, $\overline{y_j}$.
+\begin{align}
+\overline{y_j}&=\frac{\sum_{i=1}^ny_{ij}}{n}\\
+\overline{y}&=\frac{\sum_{j=1}^k\sum_{i=1}^ny_{ij}}{kn}\\
+\mathit{SSA}&=n\sum\limits_{j=1}^k(\overline{y_j}-\overline{y})^2\\
+\mathit{SSE}&=\sum\limits_{j=1}^k\sum\limits_{i=1}^n(y_{ij}-\overline{y_j})^2\\
+\mathit{SST}&=\sum\limits_{j=1}^k\sum\limits_{i=1}^n(y_{ij}-\overline{y})^2\\
+           &=\mathit{SSA}+\mathit{SSE}
+\end{align}
+
+To test if $\mathit{SSA}$ is statistically significant, we use
+\emph{F-test}. We can say that $\mathit{SSA}$ is significantly higher
+than $\mathit{SSE}$ at $\alpha$ level significance if the calculated
+\emph{F-statistic} is larger than the \emph{critical F value},
+$F_{[1-\alpha;(k-1),k(n-1)]}$. Note that $k-1$ is the degree of
+freedom for $\mathit{SSA}$ and $k(n-1)$ is the degree of freedom for
+$\mathit{SSE}$. We can calculate \emph{F-statistic} of the experiment
+by:
+\begin{equation}
+\begin{split}
+\textit{F-statistics}&=\frac{\mathit{SSA}(k(n-1))}{\mathit{SSE}(k-1)}\\
+ &=S_a^2/S_e^2
+\end{split}
+\end{equation}
+where $S_a^2$ is the variance of $\mathit{SSA}$ and $S_e^2$ is the
+variance of $\mathit{SSE}$. Therefore, F-statistic is nothing but a ratio of the signal variance and the noise variance. \emph{Critical F values} defines the minimum required ratio for the signal to have a statistical significance.
+\emph{Critical F values} for a given confidence are tabulated in numerous literature~\cite{lilja:2005}.
+
+A more compact representation of the same information is the
+\emph{p-value} which is defined to be
+\begin{equation}
+p=1-P(F\le f)
+\end{equation}
+where $P(F \le f)$ can be found from \emph{F-density function} which can
+be found in numerours statistics text books~\cite{lilja:2005}.
+\emph{P-value} represents the probability that $SSA$ is not statistically
+significant which is typically rejected if the \emph{p-value} is less
+than 0.05.

@@ -6,7 +6,7 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{longtable}
-\usepackage{tabularx}
+\usepackage{tabularx} % better space usage with Tables
 \usepackage{mathrsfs}
 \usepackage{multirow}
 \usepackage{bigstrut}
@@ -14,12 +14,31 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{bookmark}
+\usepackage{xspace}   % for forcing space after the command
+\usepackage{siunitx}  % for decimal alignment in the table
+
+%manage algorithms
+\usepackage[ruled,vlined]{algorithm2e} 
 
 \usepackage{graphicx}
 \usepackage[caption=false]{subfig}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, shapes.symbols,patterns, arrows, backgrounds}
 \input{figure/tikz_shape.tex}
+
+\newcommand{\pesto}{Pesto\xspace}
+\newcommand{\basil}{Basil\xspace}
+\newcommand{\romano}{Storage\xspace}
+\newcommand{\RAND}{X}
+\newcommand{\READ}{R}
+\newcommand{\OIO}{O}
+\newcommand{\SIZE}{Z}
+
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{observation}{Observation}
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
 
 %\input{my_definitions}
 
@@ -38,13 +57,13 @@
 % Now lets include the body of the document...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{intro}
-\include{background} %dedup sampling virtualization anova 
-\include{benchmark} %storage benchmark
-%\include{srm} %storage resource model
-%\include{romano} %io load balancer
-%\include{dedup} %backup workloads
-\include{related} 
-\include{conclusion}
+\include{background}  %dedup sampling virtualization anova 
+\include{benchmark}   %storage benchmark
+\include{spm}         %storage resource model
+\include{romano}      %io load balancer
+\include{dedup}       %backup workloads
+%\include{related} 
+%\include{conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

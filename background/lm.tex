@@ -1,0 +1,26 @@
+\section{Linear Regression}
+\label{LM}
+
+A general model that predicts $P$ given $W$ is:
+\begin{equation}
+P=f_P(w_1, w_2, w_3, ...) +\epsilon
+\end{equation}
+where $w_i$'s are set of controlled variables and $P$ is metric of
+interest. Estimating function $f_P$ without any assumption is
+computationally expensive if not impossible. Therefore, we restrict
+the form of $f_P$ to a generic linear model of the form:
+\begin{equation}\label{lm}
+\begin{split}
+P=\beta_0+\beta_1 w_1+\beta_2 w_2+...+\epsilon=W\beta+\epsilon\\
+W=\begin{bmatrix}1 & w_1 & w_2 & w_3 & ... \end{bmatrix},\;
+\beta=\begin{bmatrix}\beta_0 \\ \beta_1 \\ \beta_2 \\ ... \end{bmatrix}
+\end{split}
+\end{equation}
+One thing to note here is that the linear model only dictates how the
+$\beta$ values interact with the controlled variables. The controlled
+variables themselves can be in the form of any scale. This means that
+contrary to what many believe, $W$ does not need to have linear
+relationships with $P$. The goal is to estimate $\beta$ such
+that $\epsilon$ is acceptable. Typically, we assume that the effects
+of any factors not being modeled result in white noise and that the
+$\epsilon$ should be normally distributed.

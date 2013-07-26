@@ -1,0 +1,16 @@
+\begin{tikzpicture}[node distance = 1.5in, auto, font=\small]
+\node[disk] (ds) {Data \\ Store};
+\node[block, text width=7em, left of=ds] (tv) {Test \\ Vector};
+\node[block, text width=7em, right of=ds] (p) {Stats \\ Collector};
+\node[block, text width=7em, below of=ds] (MW) {Workload \\ Model ($M_W$)};
+\node[block, text width=7em, below of=p] (MS) {Data Store \\ Model ($M_S$)};
+\node[block, text width=7em, below of=tv] (MP) {Performance \\ Model ($M_P$)};
+\path[arrow] (tv) -- node{\textcircled{1}}(ds);
+\path[arrow] (ds) -- node{\textcircled{2}}(p);
+\path[arrow] (p) edge[out=270, in=90] node{\textcircled{3}}(MW);
+\path[arrow] (MW) -- node{\textcircled{4}}(MS);
+\path[arrow] (MW) -- node{\textcircled{6}}(MP);
+\path[arrow] (MS) edge[out=110, in=70] node{\textcircled{6}}(MP);
+\path[arrow] (p) edge[out=270, in=0] node{\textcircled{4}, \textcircled{5}}(MS);
+\path[arrow] (MS) edge[out=340, in=0, loop] node{\textcircled{5}}(MS);
+\end{tikzpicture}

@@ -1,0 +1,37 @@
+\begin{tikzpicture}[node distance = 2in, auto]
+\node[clod,
+  minimum height=1.1in,
+  minimum width=3in
+  ] (VDP) {Virtual Disk Pool};
+\node[block,
+  text width=13em,
+  node distance=1.3in,
+  below of=VDP,
+  minimum height=1in,
+  minimum width=5.5in
+  ] (RM) {
+  \begin{minipage}[t][0.8in]{6in}
+    Resource Manager
+  \end{minipage}
+  };
+\node[block,
+  node distance=0.1in,
+  below of=RM
+  ] (LB) {Romano \\ Load \\ Balancer};
+\node[block,
+  right of=LB,
+  node distance = 1.8in
+  ] (RPM) {Romano \\ Performance \\ Model};
+\node[block,
+  left of=LB,
+  node distance = 1.8in
+  ] (RIM) {Romano \\ Aggregation \\ Model};
+\node[clod,
+  node distance=1.3in,
+  minimum height=1.1in,
+  minimum width=3in,
+  below of=RM
+  ] (DSP) {Data Store Pool};
+\path[line] (VDP) -- (RM);
+\path[line] (RM) -- (DSP);
+\end{tikzpicture}

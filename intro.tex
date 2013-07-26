@@ -18,6 +18,32 @@ The performance evaluation of storage systems is a difficult task due to lack of
 
 We propose a method to quickly identify input parameters that have high effect on the performance metric of interest. We also show that using multiple benchmarks is unnecessary at times and a good benchmark can cover all operational space by providing a control over key parameters that affect the performance metric being measured. 
 
+%%%%%%%%%
+%%%%%%%%%
+
+Workload consolidation is a key technique in reducing costs in virtualized datacenters.
+When considering storage consolidation, a key problem is the unpredictable performance behavior of consolidated workloads on a given storage system.
+In practice, this often forces system administrators to grossly overprovision storage to meet application demands.
+In this paper, we show that existing modeling techniques are inaccurate and ineffective in the face of heterogenous devices.
+We introduce {\em\romano}, a storage performance management system designed to optimize truly heterogeneous virtualized datacenters.
+At its core, \romano constructs and adapts approximate workload-specific performance models of storage devices automatically, along with prediction intervals.
+It then applies these models to allow highly efficient IO load balancing.
+
+End-to-end experiments demonstrate that \romano reduces prediction error by 80\% on average compared with existing techniques.
+The result is improved load balancing with lowered variance by 82\% and reduced average and maximum latency observed across the storage systems by 52\% and 78\%, respectively.
+
+%%%%%%%%%
+%%%%%%%%%
+
+The compression and throughput performance of data deduplication system is directly affected by the input dataset. 
+We propose two sets of evaluation metrics, and the means to extract those metrics, for deduplication systems. 
+he First set of metrics represents how the composition of segments changes within the deduplication system over five full backups. 
+his in turn allows more insights into how the compression ratio will change as data accumulate.
+The second set of metrics represents index table fragmentation caused by duplicate elimination and the arrival rate at the underlying storage system.
+We show that, while shorter sequences of unique data may be bad for index caching, they provide a more uniform arrival rate which improves the overall throughput.
+Finally, we compute the metrics derived from the datasets  under evaluation and show how the datasets perform with different metrics.Our evaluation shows that backup datasets typically exhibit patterns in how they change over time and that these patterns are quantifiable in terms of how they affect the deduplication process.
+This quantification allows us to: 1) decide whether deduplication is applicable, 2) provision resources, 3) tune the data deduplication parameters and 4) potentially decide which portion of the dataset is best suited for deduplication.
+
 
 \begin{itemize}
 
