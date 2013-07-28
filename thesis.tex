@@ -16,6 +16,7 @@
 \usepackage{bookmark}
 \usepackage{xspace}   % for forcing space after the command
 \usepackage{siunitx}  % for decimal alignment in the table
+\usepackage[colorinlistoftodos, textwidth=3cm, textsize=tiny]{todonotes} % for notes
 
 %manage algorithms
 \usepackage[ruled,vlined]{algorithm2e} 
@@ -26,21 +27,13 @@
 \usetikzlibrary{shapes.geometric, shapes.symbols,patterns, arrows, backgrounds}
 \input{figure/tikz_shape.tex}
 
-\newcommand{\pesto}{Pesto\xspace}
-\newcommand{\basil}{Basil\xspace}
-\newcommand{\romano}{Storage\xspace}
-\newcommand{\RAND}{X}
-\newcommand{\READ}{R}
-\newcommand{\OIO}{O}
-\newcommand{\SIZE}{Z}
-
 \newtheorem{definition}{Definition}
 \newtheorem{assumption}{Assumption}
 \newtheorem{observation}{Observation}
 
 \providecommand{\abs}[1]{\lvert#1\rvert}
 
-%\input{my_definitions}
+\input{my_definitions}
 
 \linespread{1.3}
 \begin{document}
@@ -57,13 +50,14 @@
 % Now lets include the body of the document...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{intro}
-\include{background}  %dedup sampling virtualization anova 
-\include{benchmark}   %storage benchmark
-\include{spm}         %storage resource model
-\include{romano}      %io load balancer
-\include{dedup}       %backup workloads
-%\include{related} 
-%\include{conclusion}
+\include{background}  % deduplication virtualization 
+\include{tools}       % sampling virtualization anova 
+\include{benchmark}   % storage benchmark
+\include{spm}         % storage resource model
+\include{romano}      % io load balancer
+\include{dedup}       % backup workloads
+\include{related} 
+\include{conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

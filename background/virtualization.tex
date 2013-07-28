@@ -1,0 +1,15 @@
+\section{Storage Virtualization}
+\label{VIRT}
+
+The term \emph{storage virtualization} can be applied very broadly. 
+In fact, any type of IO indrection to provide a virtual block address space can be seen as a type of virtualization.
+
+In this work, we focus on the storage virtualization where a single storage unit provides a multiple volumns through distributed locking mechanism and IO redirection~\cite{vaghani:2010, gupta:2011, soltis:1996}.
+
+We have used VMware's VSphere 5.1 as our test platform~\cite{vmware:2013} and will describe how it virtualizes its storage stack in this section.
+
+\subsection{Architecture}
+There are two main functional components required for storage virtualization.
+The first is the command translation and the second is the address mapping. 
+
+In case of VMware's VSpere platform, default underlying mechanism is called VMFS~cite{vaghani:2010}. 

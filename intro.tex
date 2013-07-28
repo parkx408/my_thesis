@@ -1,18 +1,60 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% intro.tex: Introduction to the thesis
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
-\label{intro_chapter}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Motivation}
-%\label{motivation}
+\label{INTRO}
+% background
+% Storage Cache
+% Deduplication System
+% Virtualized Storage 
 
+% tools
+% ANOVA
+% Linear Regression
+% Component Analysis
+% PB method
+% Simulated Anealing
 
-%\section{Problem Statement}
-%\label{problem}
+% main body
+% 1. statistically accurate ways to compare the performance of two different storage systems.
+% 1a. usefulness of the synthetic workload.
+% 2. backbox model of storage system that accurately reflects the system's response to different workloads.
+% 2a. greybox model of backup workloads that reflects weekly content change. 
+% 2b. spatial locality model for storage level cache.  
+% 3. application of such model in VM IO load balancing. 
+% 4. application of such model in Backup Application.
+% 5. application of such model in Storage level cache. 
 
-%\section{Outline}
-%\label{outline}
+The current storage systems are designed based on a set of specific workloads. 
+It is assumed that these workloads represents the real workload space.
+Therefore, the optimizations are typically static and designed for a small number of workloads.
+Furthermore, there is no requirement for real time monitoring of worklaods since it is assumed that the entire workload space is already captured. 
+Finally, the performance of two storage systems are compared only within those small set of test vectors and the result is deemed final. 
+
+\nohhyun{Potentially talk about the state of academia and cite few papers as exmaple.} 
+
+The goal of this dissertation is to provide means to quantify workload characteristics such that the system can measure workload.
+This allows systems to be designed to dynamically adapt to wider spectrum of workloads.
+Additionally, it allows system comparison to be based on their response characteristics to different workloads rather than a few predefined workloads. 
+
+\nohhyun{The goal needs to be generic to support the results.}
+
+\begin{figure}[h]
+\centering
+\input{figure/storage_attributes}
+\caption{Storage system operation and attributes.}
+\label{fig:storageAttribute}
+\end{figure}
+
+A storage system is a system that supports two operations, \emph{load} and \emph{store}.
+The \emph{load} operation allows system to change its internal state and the \emph{store} operation allows this state to be verified.
+A storage system must further ensure that the interval state is immutable in an absence of a \emph{store} operation.
+
+There are numerous attributes of storage systems which are of our interest.
+The first type of attributes, \emph{flexibility} attribute, describe the allowed state transitions.
+A generic storage system allows all states to be reached from every other state and will be the focus of this work.
+The second type of attribute, \emph{capacity} attribute is the number of the states and defines the storage \emph{capacity}.
+The third type of attribute, \emph{power} attribute, defines power requirement for maintaining the states, state transition and state verification.
+The fourth type of attribute, \emph{reliability} defines the probability of state transition in the absence of \emph{store} operation.
+The last attribute, \emph{performance} attribute, defines speed at which the state transitions occur as well as verification of the states.
+These classification of attributes as well as the two primary operations are shown in Figure \ref{fig:storageAttribute}.
 
 The performance evaluation of storage systems is a difficult task due to lack of representative workloads. Storage benchmark tools test a single aspect such as random read performance at a time. While this approach does allow us to gain useful insights to the system behavior, current practices are largely inadequate due to large benchmark input parameter space. For example, a benchmark with 10 parameters require at least 1024 experiments if conducted exhaustively even if we only test extreme values of each parameter. Furthermore, there is no way to tell if the benchmark being used is enough to test all realistic scenarios. As a result, researchers and developers rely on multiple benchmarks with ad hoc input parameters.
 
@@ -47,12 +89,23 @@ This quantification allows us to: 1) decide whether deduplication is applicable,
 
 \begin{itemize}
 
-%\item Chapter 1 introduces the analytic goals pursued in this thesis.
+\item \CHP~\ref{INTRO} introduces the analytic goals pursued in this thesis.
 
-\item Chapter 2 briefly presents the history of, and science behind, the
-subjects presented in this thesis.
+\item \CHP~\ref{BG} prvides a brief overview of the storage systems that are used as part of the experimental platfrom.
 
-\item Chapter 3 describes means to evaluate storage systems using benchmark programs
+\item \CHP~\ref{TOOL} give highlevel description of the statistical tools used to dentify and quantify various components of the workload and to describe their interations with the system. 
 
+\item \CHP~\ref{BENCH} shows means to efficiently compare different benchmark programs ans suggest how they should be used to evaluate storage system performance. 
+
+\item \CHP~\ref{SPM} describes a method to model storage system performance as a function of workloads characteristics in a accurate and efficient way.
+
+\item \CHP~\ref{ROMANO} presents Romano, a load balancing system designed on top of storage performance model constructed in \CHP~\ref{SPM}
+
+\item \CHP~\ref{BW} shows the workload model can effect both the capacity and performance of backup storage system. 
+
+\item \CHP~\ref{RELATED} lists some of the related works in the area.
+
+\item \CHP~\ref{CONCLUSION} concludes the thesis work with discussion of some interesting future works. 
+ 
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

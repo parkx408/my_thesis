@@ -13,21 +13,26 @@
 \newcommand{\MOM}{{\mathrm{GeV/c}}}
 
 \newcommand{\CONT}{\noindent}
-\newcommand{\FIG}{Fig.\ }
-\newcommand{\FIGS}{Figs.\ }
 \newcommand{\SEC}{Sec.\ }
 \newcommand{\SECS}{Secs.\ }
-\newcommand{\TAB}{Table }
-\newcommand{\TABS}{Tables }
 \newcommand{\EQ}{Eq.\ }
 \newcommand{\EQS}{Eqs.\ }
 \newcommand{\APP}{Appendix }
 \newcommand{\APPS}{Appendices }
-\newcommand{\CHP}{Chapter }
+\newcommand{\CHP}{Chapter}
 \newcommand{\CHPS}{Chapters }
 
-\newcommand{\OFF}{\emph{G2off}~}
-\newcommand{\TOO}{\emph{G2Too}~}
+\newcommand{\pesto}{Pesto\xspace}
+\newcommand{\basil}{Basil\xspace}
+\newcommand{\romano}{Romano\xspace}
+\newcommand{\RAND}{X}
+\newcommand{\READ}{R}
+\newcommand{\OIO}{O}
+\newcommand{\SIZE}{Z}
 
-\newcommand{\romano}{\emph{Romano}}
+\newcounter{todocounter}
+\newcommand{\nohhyun}[2][]{
+  \stepcounter{todocounter}
+  \todo[#1, color=blue!20]{\textbf{\thetodocounter:} #2}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

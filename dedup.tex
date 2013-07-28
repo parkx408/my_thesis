@@ -2,7 +2,7 @@
 % simulation.tex: Chapter on MC production:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Backup Workload and Data Deduplication}
-\label{dedup}
+\label{BW}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Data deduplication provides a means to efficiently remove redundancies from large datasets. 
@@ -373,17 +373,6 @@ The analysis of run length suggest that it maybe more beneficial for the through
 
 Last application maybe to adjust buffer sizes at each stage of deduplication based on the run length observed to minimized skewed arrival effect. 
 
-\section{Related Work}\label{rel}
-%Data Deduplication system
-The workload presented in typical deduplication systems paper are either from a privately accessible systems~\cite{clements:2009, rhea:2008, manber:1994,koller:2010, aronovich:2009, lillibridge:2009, zhu:2008} or a relatively small dataset of specific type in public domain~\cite{storer:2008,kruus:2010,eshghi:2005}. However, either techniques allow a direct comparison of different systems if the dataset under evaluation is completely different or if it only covers a dataset of a particular characteristics. 
-
-%Input data characterization
-There have been few work in trying to statistically characterize the input dataset to various benchmark programs~\cite{eeckhout:2003, yi:2002, hsu:2002}. However, these papers concentrate on generic sub-setting of dataset so that different characteristics of application is explored statistically hence lacking in accuracy when it comes to predicting exact performance variances. 
-
-%File system image analysis
-Numerous works have also been applied in filesystem activities and its contents~\cite{douceur:1999, leung:2008, douceur:1999} with one paper using a simple statistical analysis to characterize a filesystem impression~\cite{agrawal:2009}. While these approaches all reveal some interesting intuitions of how we use storage systems, the scope is too generic to be neither accurate or simple enough to be applied in real systems. More specific workload analysis have been targeted to SSDs~\cite{soundararajan:2010} and we use some of their approach in out analysis. 
-
-
  \begin{figure}[!t]
 \centerline{
 \subfloat[Real Data]{\includegraphics[width=1.9in]{figure/dedup/full016}
@@ -395,8 +384,6 @@ Numerous works have also been applied in filesystem activities and its contents~
 \caption{The original segment composition of workstation and the predicted values.}
 \label{pred}
 \end{figure}
-
-Moreover, we believe that this is a first approach in analyzing the deduplication process in terms of the input dataset. \\
 
 \section{Limitations}\label{lim}
 %%Assumptions - second assumption can be proven with in statistical margin.
