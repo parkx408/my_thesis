@@ -56,7 +56,7 @@ Minimal changes were made to the ESXi hypervisor to collect additional stats for
 
 \section{Romano Design}
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \input{figure/romano_design}
 \caption{High level view of Romano.
@@ -100,9 +100,10 @@ The arrival rate will only depend on the service rate of the requests and not on
 For Romano this weight to be used for averaging is already available as the inverse of \emph{LQ-slope}, which represents the throughput~($T$) from our performance model in Equation \ref{rpmf:eq}.
 
 The \emph{Random}~($\RAND$) is tricky because the randomness of access cannot be defined per IO request and cannot be simply averaged.
-\begin{figure}
+
+\begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure/seek_profile.pdf}
+\includegraphics[width=0.7\textwidth]{figure/seek_profile.pdf}
 \caption{Seek profile of different workloads.
 Each color represents different mix of $\RAND$ for workload with $\SIZE=4\mathit{KB}$, $\READ=100\%$ read, $\OIO=1$.
 \emph{mseeks} represents seeks done within a virtual disk and \emph{lseeks} represents seeks done across the virtual disks.}
@@ -139,9 +140,9 @@ Intuitively, the storage system is typically serving the high throughput workloa
 Therefore, Equation \ref{r3} calculates the amount of $lseeks$ which is proportional to the ratio between the low throughput and the total throughput.
 This value is multiplied by $2*\overline{seq}$ since almost every $lseek$ between the sequential workload is matched by a $lseek$ in the opposite direction to serve both virtual disks.
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure/random_accuracy.pdf}
+\includegraphics[width=0.7\textwidth]{figure/random_accuracy.pdf}
 \caption{Comparison of $f_R$ and $T$ weighted average for the randomness of aggregated workloads.
 Each color represents different methods.
 Other characteristics are fixed at $S=4\mathit{KB}$, $\READ=100\%$ read, $\OIO=1$.
@@ -330,7 +331,7 @@ $\OIO$ was randomly assigned from 1 to 3. The test was repeated on two data stor
 
 The workload aggregation method used in Pesto~\cite{gulati:2011} is to average their workload metric $\omega$ weighted by $OIO$.
 To isolate the effect of workload aggregation, we average individual workload characteristics weighted by $\OIO$ and use \emph{Romano Performance Model} to predict the latency.
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Sample of latency prediction]{\label{aggrPred}\includegraphics[width=0.625\textwidth]{figure/aggr_result.pdf}}
 \subfloat[Residuals box plot]{\label{aggrRes}\includegraphics[width=0.375\textwidth]{figure/aggr_error.pdf}}
@@ -365,7 +366,7 @@ We leave the further investigation to future work.
 
 \subsection{Load Balancing Using Romano}
 %\nohhyun{Section 5.4, the actual algorithm for load balancing is not clear. The pseudo-code given is clearly wrong and it isn't obvious what is actually meant.  In particular, I can't tell how you balance between placing a virtual disk on the data store that is best suited for it, against the other virtual disks that are also best suited to that data store.}
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Initial data stores latencies.]{\label{lb_init}\includegraphics[width=0.3\textwidth]{figure/initial_datastore_latency.pdf}}
 \subfloat[Result of Basil load balancing]{\label{lb_basil}\includegraphics[width=0.3\textwidth]{figure/basil_datastore_latency.pdf}}
@@ -403,7 +404,7 @@ Basil and Pesto uses a greedy approach~\cite{gulati:2010} which terminates the a
 Romano uses simulated annealing to find the pseudo optimal placement first and than uses greedy approach to get to the optimal placement.
 This allows Romano to avoid moves that may result in maximum benefit but prohibits any further moves that may provide additional benefits.
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Basil]{\label{basil_mv}\includegraphics[width=0.5\textwidth]{figure/basil_required_moves.pdf}}
 \subfloat[Romano]{\label{romano_mv}\includegraphics[width=0.5\textwidth]{figure/romano_required_moves.pdf}}
@@ -412,7 +413,7 @@ The distribution of number of moves resulting from Basil and Romano.
 }
 \label{moves}
 \end{figure}
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figure/romano_latency_2moves.pdf}
 \caption{Data store latencies after maximum of 2 moves with Romano.}
@@ -424,7 +425,7 @@ On average Basil requires $2.2$ moves where as Romano required $2.6$.
 Storage migration is expensive and should avoided if possible.
 However, we show that even if we limit the maximum number of moves to 2, Romano still out performs Basil as shown in \figurename~\ref{two}.
 This is due to the greedy approach in which Romano chooses moves once the pseudo-optimal placement is identified.
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{figure/23latency_reduction.pdf}
 \caption{Typical Romano load balancing process with large number of moves.}

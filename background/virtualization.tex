@@ -2,9 +2,9 @@
 \label{VIRT}
 
 The term \emph{storage virtualization} can be applied very broadly. 
-In fact, any type of IO indrection to provide a virtual block address space can be seen as a type of virtualization.
+In fact, any type of IO indirection to provide a virtual block address space can be seen as a type of virtualization.
 
-In this work, we focus on the storage virtualization where a single storage unit provides a multiple volumns through distributed locking mechanism and IO redirection~\cite{vaghani:2010, gupta:2011, soltis:1996}.
+In this work, we focus on the storage virtualization where a single storage unit provides a multiple volumes through distributed locking mechanism and IO redirection~\cite{vaghani:2010, gupta:2011, soltis:1996}.
 
 We have used VMware's VSphere 5.1 as our test platform~\cite{vmware:2013} and will describe how it virtualizes its storage stack in this section.
 
@@ -20,7 +20,7 @@ We have used VMware's VSphere 5.1 as our test platform~\cite{vmware:2013} and wi
 \figurename~\ref{fig:vio} outlines high level view of virtualized storage stack.
 
 For storage controllers, VMware hypervisor provides guest with LSI Logic or Bus Logic driver interface regardless of the underlying hardware. 
-These drivers converts the IO requests to privileged IN and OUT instructions which are traped by the hypervisor and is handed by the SCSI emuation layer called \emph{vSCSI} layer. 
+These drivers converts the IO requests to privileged IN and OUT instructions which are trapped by the hypervisor and is handed by the SCSI emulation layer called \emph{vSCSI} layer. 
 This allows every IO to be inspected per VM, per virtual disk basis~\cite{ahmad:2007}. 
 This provides an efficient mechanism to measure workload load characteristics at highest resolution.  
 
@@ -34,13 +34,23 @@ The command translation layer should translate this command to stat command to r
 For READ and WRITE operations, the requesting LBA and the block size needs to be translated into filename, offset and size by the address translation layer. 
 
 Once the translation is complete, the resulting filesystem call is passed to VMFS layer which manages metadata consistency through distributed locks. 
-Like any filesystem, VMFS tranlates the filesystem calls to the undelying block device calls wich than is translated into the underlying SCSI command through the volumn manager. 
+Like any filesystem, VMFS translates the filesystem calls to the underlying block device calls which than is translated into the underlying SCSI command through the volume manager. 
 
 The backing storage system can be any device that understands SCSI protocol including FC and SAS. 
 
-\subsection{storage IO Control}
+\nohhyun{storage IO control}
 
+\subsection{Storage Live Migration}
+One of the main benefits of virtualization is decoupling of underlying Hardware from the execution environment. 
+Such decoupling allows the execution environment and all its virtual resources to be migrated while the execution is live. 
 
-\subsection{vMotion}
+VM migration across different hosts have been available for a long time~\cite{clark:2005}.
+However, it relied on the shared storage since migration of entire storage contents would prove to be too expensive.
+To hide the expensive migration cost of storage systems, a mirroring scheme is used~\cite{mashtizadeh:2011}.
+The storage system is divided into separate regions and are copied one by one. IF the region that is already copied is written to, the write is mirrored to the remote storage. 
+If the region that is being copied is written to, the write is buffered to be flushed upon completion. 
+This process will continue until only a single region to be copied is left at which time the VM will suspend for the final leg of the copy. 
+The typical down time for 32GB virtual disks was shown to be around $0.2\SEC$~\cite{mashtizadeh:2011}.
 
-
+The live migration of virtual disks provide mechanism to control the workload-system interactions.
+We will explore this aspect in detail in Chapter~\ref{ROMANO}.

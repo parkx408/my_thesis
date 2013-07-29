@@ -164,7 +164,7 @@ These components are clustered to generate a view of coverage of each benchmark.
 
 \subsubsection{Evaluation of Benchmark Parameter Effect}
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \input{figure/benchmark_experiment}
 \caption{Experiment flow for estimating the parameter effects on performance}
@@ -228,14 +228,14 @@ We evaluate the best number of components for clean clustering and determine the
 \section{Results}
 
 \subsection{Effects}
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \includegraphics[width=1\textwidth]{figure/pm_effect.png}
 \caption{PostMark parameter effects.}
 \label{pm_effect}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \includegraphics[width=1\textwidth]{figure/fio_effect.png}
 \caption{FIO parameter effects.}
@@ -323,7 +323,7 @@ throughput  & threads\_same                               &         \\
 \figurename~\ref{fio_effect} shows the effect of each parameter on four performance metrics measured and \tablename~\ref{fio_50_t} shows list of parameters with the most effect on each performance metric such that sum of the effects exceed 50\%of overall effects. It is interesting to note that the most important parameters for read and write latencies are the same. We can assume that read and write operations themselves do not affect the latency in our system. This can expected, since on HDD, read and write operations do not result in significantly different response time.  Furthermore, we see that the \emph{threads\_same} parameter is important for all metrics. This indicates that the interference between the threads can seriously affect the performance. While the \emph{thread\_count} parameter is also important, the effect on the read throughput is shown to be negligible. Both throughputs are sensitive to the \emph{access\_pattern} which is expected but surprisingly the latency is not. Instead, they are much more sensitive to the \emph{posix\_fadvise} setting. This suggests that latency is not determined by the seek time but rather cache miss penalties. 
 
 \subsection{Coverage of Benchmarks}
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Read Performance Coverage.]{
   \centering

@@ -1,7 +1,7 @@
 \chapter{Storage Performance Model}
 \label{SPM}
 
-\begin{table}
+\begin{table}[!t]
 \centering
 \begin{tabularx}{\textwidth}{c|X||c|X}
 \hline
@@ -20,7 +20,7 @@ Before describing \romano Performance Model in detail we define a few variables 
 
 \section{\romano Performance Model Framework}
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \input{figure/performance_model_framework}
 \caption{\romano Performance Model framework.}
@@ -106,7 +106,7 @@ How to describe an IO workload in a generic manner is an open question~\cite{liu
 Unlike Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011}, \romano generates a separate $M_W$ for each data store.
 While it is tempting to derive $M_W$ in a data store independent manner, we found the resulting performance model~($M_P$) to be neither robust nor accurate.
 This is because each data store interacts with the characteristics of the workload in a different manner.
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[E1]{\label{fig:E1read}\includegraphics[width=0.5\textwidth]{figure/emc-3disk-raid0_basic_8_120s_read_single_var.pdf}}
 \subfloat[N2]{\label{fig:N2read}\includegraphics[width=0.5\textwidth]{figure/srs7diskfc_netapp_basic_8_120s_read_single_var.pdf}}
@@ -116,7 +116,7 @@ The effect of $\READ$ on E1 is much more predictable(therefore significant) than
 }
 \label{readParam}
 \end{figure}
-\begin{table}
+\begin{table}[!t]
 \centering
 \begin{tabularx}{\textwidth}{
   X|
@@ -152,7 +152,7 @@ For example, the interaction between $\RAND$ and $\READ$ can be factored in to t
 Therefore, given 4 characteristics, there are $2^4-1=15$ possible terms including the interactions.
 To check which of the 15 terms actually have a significant effect on the performance, we conduct ANOVA at 95\% confidence controlling the 15 terms~(using the test vector) and observing the latency on four test data store shown in \tablename~\ref{ds}.
 
-\begin{table}
+\begin{table}[!t]
 \centering
 \begin{tabularx}{\textwidth}{
   X|
@@ -200,7 +200,7 @@ The resulting $M_W$ accounts for any interactions as well as their significance 
 While the cost of the experiment is not cheap, this only has to be done once per data store type in the system.
 
 \paragraph{Data Store Model}
-\begin{table}
+\begin{table}[!t]
 \centering
 \begin{tabularx}{\textwidth}{
   X|
@@ -266,7 +266,7 @@ Since the \emph{outstanding IO}~($\OIO$) is the number of IO requests outstandin
 It is also the average service time of requests at equilibrium and its inverse is the throughput~($T$) in $\mathit{IO}/s$.
 Pesto~\cite{gulati:2011} describes the linear relationship between $\OIO$ and $P$ in much more depth and we refer interested readers to their work.
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[E1]{\includegraphics[width=0.5\textwidth]{figure/emc-3disk-raid0_basic_8_120s_oio_single_var.pdf}}
 \subfloat[E2]{\includegraphics[width=0.5\textwidth]{figure/emc-6diskfc-sp_basic_8_120s_oio_single_var.pdf}}\\
@@ -326,7 +326,7 @@ Specifically, we use Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011} as th
 To evaluate the accuracy we use \emph{test vector} and run them against for 4 test data stores (\tablename~\ref{ds}).
 The resulting 6400 latencies are compared against the predictions of 4 techniques.
 
-\begin{table}
+\begin{table}[!t]
 \small
 \centering
 %\begin{tabular}[t]{l|S S S S}
@@ -379,7 +379,7 @@ In short, our proposed model shows 80\% improvement in overall prediction accura
 %The usefulness of these techniques are still being evaluated and are left for our future work.
 
 \section{Prediction Interval}
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \includegraphics[width=0.6\columnwidth, clip, trim=0 0.2in 0 0.7in]{figure/prediction_interval2.pdf}
 %\captionsetup{format=myformat}
@@ -415,7 +415,7 @@ On the other hand a higher confidence interval will result in moves that are onl
 
 \section{Handling Heterogeneous Data Stores}
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Measured Relative Latency]{\label{slm}\includegraphics[width=0.33\textwidth]{figure/sorted_latency.pdf}}
 \subfloat[Pesto Prediction - relative]{\label{slp}\includegraphics[width=0.33\textwidth]{figure/pesto_sorted_latency.pdf}}
@@ -437,7 +437,7 @@ Basil is not compared here since it only generates a single model across the dat
 Pesto injects a \emph{4KB, random and read-only} workload into the data store to derive the \emph{LQ-slope} for a given data store.
 \tablename~\ref{pestolq} shows the Pesto LQ-slope of four test data stores.
 Since each data store has a fixed LQ-slope regardless of the workload, running same workloads on multiple data stores will always result in constant ratio equal to the LQ-slope ratio.
-\begin{table}
+\begin{table}[!t]
 \centering
 \begin{tabularx}{\textwidth}{
   >{\centering}X|
@@ -465,7 +465,7 @@ In fact, N1 seems to have the highest latency of all data stores on average even
 For those corner cases where the model fails to capture the exact relative order of performance, the prediction intervals tend to be very large.
 Therefore, Romano will not make any predictions for those cases with high confidence indicating that actions should not be made based on the prediction values only.
 
-\begin{figure}
+\begin{figure}[!t]
 \centering
 \subfloat[Pesto]{\label{rdPesto}\includegraphics[width=0.5\textwidth]{figure/error_hist_compare_pesto.pdf}}
 \subfloat[Proposed model]{\label{rdRomano}\includegraphics[width=0.5\textwidth]{figure/error_hist_compare_kromano.pdf}}
