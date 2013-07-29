@@ -1,0 +1,18 @@
+\begin{tikzpicture}[auto,node distance=2.3cm]
+    \tikzstyle{every label}=[red]
+    % Place nodes
+    \node [block, minimum height=3em] (vm) {Guest vSCSI Driver};
+    \node [block, minimum height=3em, below of=vm] (cmd) {Command Translation};
+    \node [block, minimum height=3em, below of=cmd, node distance = 1.5cm] (add) {Address Translation};
+    \node [block, minimum height=3em, below of=add] (vmfs) {VMFS};
+    \node [block, minimum height=3em, below of=vmfs] (vmgr) {Volumn Manager};
+    \node [disk, below of=vmgr] (scsi) {SCSI Device};
+    \node [draw=red, fit=(cmd) (add), text=red, label=above left:SCSI Virtualization Layer](virt) {};
+    % Draw edges
+    \path [line] (vm) --node{\text{SCSI Protocol}}(virt);
+    \path [line] (cmd) -- (add);
+    \path [line] (virt) -- node{\text{Filesystem API}}(vmfs);
+    \path [line] (vmfs) -- node{\text{Block Device API}}(vmgr);
+    \path [line] (vmgr) -- node{\text{SCSI Protocol}}(scsi);
+    
+\end{tikzpicture}

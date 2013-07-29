@@ -9,7 +9,38 @@ In this work, we focus on the storage virtualization where a single storage unit
 We have used VMware's VSphere 5.1 as our test platform~\cite{vmware:2013} and will describe how it virtualizes its storage stack in this section.
 
 \subsection{Architecture}
+
+\begin{figure}[!t]
+\centering
+\input{figure/virtualized_io}
+\label{fig:vio}
+\caption{Virtualized IO Stack. The raw SCSI command is remapped to a file operation on VMFS via virtualization layer.}
+\end{figure}
+
+\figurename~\ref{fig:vio} outlines high level view of virtualized storage stack.
+
+For storage controllers, VMware hypervisor provides guest with LSI Logic or Bus Logic driver interface regardless of the underlying hardware. 
+These drivers converts the IO requests to privileged IN and OUT instructions which are traped by the hypervisor and is handed by the SCSI emuation layer called \emph{vSCSI} layer. 
+This allows every IO to be inspected per VM, per virtual disk basis~\cite{ahmad:2007}. 
+This provides an efficient mechanism to measure workload load characteristics at highest resolution.  
+
 There are two main functional components required for storage virtualization.
 The first is the command translation and the second is the address mapping. 
+These are provided by the hypervisor through SCSI virtualization layer.
 
-In case of VMware's VSpere platform, default underlying mechanism is called VMFS~cite{vaghani:2010}. 
+For example, READ CAPACITY command should return the last \emph{logical block address}(LBA) of the device or $\mathtt{FFFFFFFFFh}$~\cite{seagate:2006}. 
+The command translation layer should translate this command to stat command to retrieve the number of blocks in a file. 
+
+For READ and WRITE operations, the requesting LBA and the block size needs to be translated into filename, offset and size by the address translation layer. 
+
+Once the translation is complete, the resulting filesystem call is passed to VMFS layer which manages metadata consistency through distributed locks. 
+Like any filesystem, VMFS tranlates the filesystem calls to the undelying block device calls wich than is translated into the underlying SCSI command through the volumn manager. 
+
+The backing storage system can be any device that understands SCSI protocol including FC and SAS. 
+
+\subsection{storage IO Control}
+
+
+\subsection{vMotion}
+
+
