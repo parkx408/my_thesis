@@ -59,6 +59,7 @@ Minimal changes were made to the ESXi hypervisor to collect additional stats for
 \begin{figure}[!t]
 \centering
 \input{figure/romano_design}
+\captionsetup{format=myformat}
 \caption{High level view of Romano.
 Romano maps virtual disks onto pool of data stores to satisfy the load balancing policy.
 }
@@ -103,7 +104,8 @@ The \emph{Random}~($\RAND$) is tricky because the randomness of access cannot be
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.7\textwidth]{figure/seek_profile.pdf}
+\includegraphics[width=0.8\textwidth]{figure/seek_profile.pdf}
+\captionsetup{format=myformat}
 \caption{Seek profile of different workloads.
 Each color represents different mix of $\RAND$ for workload with $\SIZE=4\mathit{KB}$, $\READ=100\%$ read, $\OIO=1$.
 \emph{mseeks} represents seeks done within a virtual disk and \emph{lseeks} represents seeks done across the virtual disks.}
@@ -142,7 +144,8 @@ This value is multiplied by $2*\overline{seq}$ since almost every $lseek$ betwee
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.7\textwidth]{figure/random_accuracy.pdf}
+\includegraphics[width=0.8\textwidth]{figure/random_accuracy.pdf}
+\captionsetup{format=myformat}
 \caption{Comparison of $f_R$ and $T$ weighted average for the randomness of aggregated workloads.
 Each color represents different methods.
 Other characteristics are fixed at $S=4\mathit{KB}$, $\READ=100\%$ read, $\OIO=1$.
@@ -162,7 +165,7 @@ Putting it together, \emph{Romano Aggregation Model} is;
 where aggregating more than 2 workloads require $f_{\RAND}$ to be recursively applied to the workloads.
 In practice, this is naturally done since only a single virtual disk is migrated at a time.
 
-\subsection{Romano Load Balancer}
+\section{Romano Load Balancer}
 The \emph{Romano Load Balancer} is different from traditional load balancers~\cite{gulati:2010, gulati:2011, singh:2008} in two ways.
 Firstly, it optimizes the global state rather than a single storage migration.
 Secondly, it is proactive.
@@ -170,7 +173,7 @@ The balancing mechanism does not wait until a overutilization is detected.
 It continuously adjust the overall state whenever possible to ensure that systems are less likely to be over-utilized.
 This is made possible by Romano's accurate and robust modeling techniques.
 
-\paragraph{Merit Metric}
+\subsection{Merit Metric}
 Our load balancing goal is to minimize the overall latency while reducing the maximum latency.
 To represent both aspect of our goal with a single metric, we define Romano load balancing metric of Merit~($M$) to be the form;
 \begin{equation}\label{merit}
@@ -182,16 +185,16 @@ However, as $\alpha$ becomes larger, more weight is given to high latencies.
 Our experiment shows that 5 is a reasonable value for $\alpha$.
 However, further exploration of $\alpha$ space is left for the future work.
 
-\paragraph{Load Balancing}
+\subsection{Load Balancing}
+
 \begin{algorithm}[!t]
 \DontPrintSemicolon
 \SetKw{updateMerit}{updateMerit}
-\SetKw{minimizeMerit}{minimizeMerit}
-\SetKw{loadBalance}{loadBalance}
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\updateMerit($W_{cand}, S_{cand}, \Phi$)
+\updateMerit($W_{cand}, S_{dest}, \Phi$)
 \Begin {
-  $W_{src}\leftarrow getW(getS(W_{cand}, \Phi), \Phi)$\;
+  $S_{src}\leftarrow getS(W_{cand}, \Phi)$\;
+  $W_{src}\leftarrow getW(S_{src}, \Phi)$\;
   $W_{dest}\leftarrow getW(S_{cand}, \Phi)$\;
   $W'_{src}\leftarrow$aggregate($W_{src}-W_{cand}$)\;
   $W'_{dest}\leftarrow$aggregate($W_{dest}+W_{cand}$)\;
@@ -199,13 +202,20 @@ However, further exploration of $\alpha$ space is left for the future work.
   $P'_{dest}\leftarrow$predict($S_{dest}$, $W'_{dest}$)\;
   \Return{merit($P'_{all}$)}
 }
+\caption{Merit Update Function}\label{malgo}
+\end{algorithm}
+
+\begin{algorithm}[!t]
+\DontPrintSemicolon
+\SetKw{minimizeMerit}{minimizeMerit}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 \minimizeMerit($\Phi_i, M_i$)
 \Begin{
-  $\Phi\leftarrow \Phi_i$;
-  $M\leftarrow M_i$;
-  $\Phi_f\leftarrow \Phi_i$;
-  $M_f\leftarrow M_i$;
-  $K\leftarrow 0$;
+  $\Phi\leftarrow \Phi_i$\;
+  $M\leftarrow M_i$\;
+  $\Phi_f\leftarrow \Phi_i$\;
+  $M_f\leftarrow M_i$\;
+  $K\leftarrow 0$\;
   \While{$K<K_{max}$} {
     $T\leftarrow$temperature($k/k_{max}$)\;
     $W_{cand}\leftarrow$randomChoose($W_{all}$)\;
@@ -222,6 +232,14 @@ However, further exploration of $\alpha$ space is left for the future work.
   }
   \Return{$\Phi_f, M_f$}
 }
+\caption{Simulated Anealing}\label{salgo}
+\end{algorithm}
+
+
+\begin{algorithm}[!t]
+\DontPrintSemicolon
+\SetKw{loadBalance}{loadBalance}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 \loadBalance($\Phi_i$)
 \Begin{
   $M_i \leftarrow$merit($\Phi_i$);
@@ -245,8 +263,9 @@ However, further exploration of $\alpha$ space is left for the future work.
     $\mathit{MoveCandidate} \leftarrow \mathit{MoveCandidate}-W$\;
   }
 }
-\caption{Romano Load Balancing Algorithm using Simulated Annealing}\label{algo}
+\caption{Romano Load Balancing Algorithm}\label{algo}
 \end{algorithm}
+
 Romano uses \emph{simulated annealing}~\cite{kirkpatrick:1983} to optimize the overall placement and then makes moves that result in maximum reduction of $M$.
 The reason for the first step is that greedy approaches used in previous works~\cite{gulati:2010, gulati:2011, singh:2008} could result in a local optimum that is far from the global optimum.
 The solution cannot be greedy since any optimal sub-placement needs to be reevaluated once a new workload is added due to the aggregation function.
@@ -259,15 +278,13 @@ This way, we can make moves that result in the largest reduction of $M$ while al
 Of course, there may be a move that results in an even larger reduction but the move may prohibit the possibility of further reduction of $M$.
 
 Algorithm \ref{algo} outlines the Romano load balancer.
-In this algorithm, $\Phi$ represents the current mapping of workloads to data stores.
-$getS(W, \Phi)$ represents the data store on which $W$ is mapped in current State $\Phi$ while $getW(S, \Phi)$ represents all the workloads mapped onto data store $S$ in state $\Phi$.
-\emph{updateMerit} function takes the current system state~(all Workload mappings and their performance) and calculates new \emph{Merit} value.
-Note that our goal is to minimize the Merit value.
-The \emph{aggregate} function is \emph{Romano Aggregation Model} and \emph{predict} function is \emph{Romano Performance Model}.
-Therefore, \emph{updateMerit} function is given a workload candidate to be migrated and destination data store.
-New aggregated workloads are calculated and their performances are predicted.
-Given the new performances of source and destination data stores, global merit is recalculated.
-The \emph{minimizeMerit} function uses simulated annealing to minimize the Merit value.
+In this algorithm, $\Phi$ represents the current mapping of workloads to data stores which is essentially current state of the system.
+It requires two subcomponents, Alogrithm~\ref{malgo} and Algorithm\ref{salgo}. 
+
+Algorithm \ref{malgo} simply moves a virtual disk, $W_{cand}$, to a datastore, $S_{dest}$ and recalculates the system's \emph{merit} based on the performance prediction of the source datastore, $S_{src}$, and the target datastore, $S_{dest}$.
+
+Algorithm \ref{salgo} is the simulated annealing process where given a state and its merit, it will return a pseudo-optimal state and its merit which should be close to the global minima.
+This has worked surprisingly well for this application as it will be shown in the results. 
 The \emph{temperature} function and $G$ functions are taken from the earlier works on simulated annealing~\cite{kirkpatrick:1983}.
 The \emph{temperature} function simply divides $k/k_{max}$ by $1.2$ every iteration.
 $G$ function returns 1 if current merit is lower than previous merit so that the move is always accepted, but returns $e^{(M-M')/T}$ when current merit value is higher.
@@ -278,22 +295,31 @@ New merit is calculated and the move is either rejected or accepted based on the
 All our experiments required less than 200 iterations to complete.
 The convergence rate of simulated annealing is difficult to predict without any structural information of the state space.
 However, since we do not need the absolute minimum $M$, we can simply fix the maximum number of iterations to a reasonable number and choose the best state found.
+
 The \emph{loadBalance} function takes the current state~($\Phi$) and calls on \emph{minimizeMerit} function to determine the pseudo-optimal mapping of $W$ on $S$.
 Once the mapping is determined, it uses a greedy approach to determine which moves to execute. \emph{updateMerit} function is called on all possible moves to determine the next move.
 Note that \emph{updateMerit} function executes in $O(1)$.
 The process is repeated until the pseudo-optimal mapping is reached.
+$getS(W, \Phi)$ represents the data store on which $W$ is mapped in current State $\Phi$ while $getW(S, \Phi)$ represents all the workloads mapped onto data store $S$ in state $\Phi$.
+
+\emph{updateMerit} function takes the current system state~(all Workload mappings and their performance) and calculates new \emph{Merit} value.
+Note that our goal is to minimize the Merit value.
+The \emph{aggregate} function is \emph{Romano Aggregation Model} and \emph{predict} function is \emph{Romano Performance Model}.
+Therefore, \emph{updateMerit} function is given a workload candidate to be migrated and destination data store.
+New aggregated workloads are calculated and their performances are predicted.
+Given the new performances of source and destination data stores, global merit is recalculated.
 
 In practice, it is unlikely that all the moves will be carried out due to the cost involved with the migration. Furthermore, the workload themselves are going to change over time.
 Therefore, Algorithm \ref{algo} will periodically rerun \emph{minimizeMerit} function and continually transition the system towards the newly found pseudo-optimal state without ever actually getting there.
 
+\section{Results}
+
 \subsection{Workload Aggregation}
 
-%\nohhyun{5.3  I don’t understand equations 23-25.  What do these parameters mean for a workload?  I tried to compare them to previous equations but could not find a matching format.  I can kind of figure out that C is more random than the others, B is read only, C has small IO size, but I don’t understand the OIO field. }
-%Our experiment takes two three workloads to be ran on a single data store:
 To test the effect of workload aggregation, we need to able to generate a repeatable workload.
 \begin{table}
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X|
   >{\centering}X|
   >{\centering}X|
@@ -315,10 +341,9 @@ Workstation     & 8KB             & 80\%              & 80\% \\
 VOD             & 512KB           & 100\%             & 100\% \\
 \hline
 \end{tabularx}
-%\captionsetup{format=myformat}
+\captionsetup{format=myformat}
 \caption{Workload characteristics suggested by Wang~\cite{wang:2009}.
 These workloads are used to ensure repeatable experiments.
-%\cite{workload-suggestion}
 }
 \label{test_wl}
 \end{table}
@@ -335,7 +360,7 @@ To isolate the effect of workload aggregation, we average individual workload ch
 \centering
 \subfloat[Sample of latency prediction]{\label{aggrPred}\includegraphics[width=0.625\textwidth]{figure/aggr_result.pdf}}
 \subfloat[Residuals box plot]{\label{aggrRes}\includegraphics[width=0.375\textwidth]{figure/aggr_error.pdf}}
-%\captionsetup{format=myformat}
+\captionsetup{format=myformat}
 \caption{Result of workload aggregation.
 Two Workloads from \tablename~\ref{test_wl} were placed randomly across two data stores, E1 and N2.
 \figurename~\ref{aggrPred} shows 20 randomly sampled results from 110 placements on both data stores (55 each).
@@ -365,12 +390,18 @@ We believe that amount of uncertainty introduced by workload aggregation is diff
 We leave the further investigation to future work.
 
 \subsection{Load Balancing Using Romano}
-%\nohhyun{Section 5.4, the actual algorithm for load balancing is not clear. The pseudo-code given is clearly wrong and it isn't obvious what is actually meant.  In particular, I can't tell how you balance between placing a virtual disk on the data store that is best suited for it, against the other virtual disks that are also best suited to that data store.}
+
 \begin{figure}[!t]
 \centering
-\subfloat[Initial data stores latencies.]{\label{lb_init}\includegraphics[width=0.3\textwidth]{figure/initial_datastore_latency.pdf}}
-\subfloat[Result of Basil load balancing]{\label{lb_basil}\includegraphics[width=0.3\textwidth]{figure/basil_datastore_latency.pdf}}
-\subfloat[Result of Romano load balancing.]{\label{lb_after}\includegraphics[width=.3\textwidth]{figure/romano_datastore_latency.pdf}}
+\subfloat[Initial data stores latencies.]{\label{lb_init}\includegraphics[width=0.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/initial_datastore_latency.pdf}}\\
+\subfloat[Result of Basil load balancing]{\label{lb_basil}\includegraphics[width=0.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/basil_datastore_latency.pdf}}\\
+\end{figure}
+
+\begin{figure}[!t]
+\ContinuedFloat
+\centering
+\subfloat[Result of Romano load balancing.]{\label{lb_after}\includegraphics[width=.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/romano_datastore_latency.pdf}}
+\captionsetup{format=myformat}
 \caption{Boxplot of average data store latencies on 50 different test cases.
 Each test randomly placed 8-14 workloads from \tablename~\ref{test_wl} (allowing repetition) on 4 data stores.
 Basil's greedy approach is compared with Romano's random optimization technique.
@@ -408,29 +439,36 @@ This allows Romano to avoid moves that may result in maximum benefit but prohibi
 \centering
 \subfloat[Basil]{\label{basil_mv}\includegraphics[width=0.5\textwidth]{figure/basil_required_moves.pdf}}
 \subfloat[Romano]{\label{romano_mv}\includegraphics[width=0.5\textwidth]{figure/romano_required_moves.pdf}}
+\captionsetup{format=myformat}
 \caption{
 The distribution of number of moves resulting from Basil and Romano.
 }
 \label{moves}
 \end{figure}
+
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure/romano_latency_2moves.pdf}
+\includegraphics[width=0.8\textwidth]{figure/romano_latency_2moves.pdf}
+\captionsetup{format=myformat}
 \caption{Data store latencies after maximum of 2 moves with Romano.}
 \label{two}
 \end{figure}
+
 One limitation of this approach is that it does require more moves to be made.
 \figurename~\ref{moves} shows the number of moves required for Basil and Romano.
 On average Basil requires $2.2$ moves where as Romano required $2.6$.
 Storage migration is expensive and should avoided if possible.
 However, we show that even if we limit the maximum number of moves to 2, Romano still out performs Basil as shown in \figurename~\ref{two}.
 This is due to the greedy approach in which Romano chooses moves once the pseudo-optimal placement is identified.
+
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure/23latency_reduction.pdf}
+\includegraphics[width=0.8\textwidth]{figure/23latency_reduction.pdf}
+\captionsetup{format=myformat}
 \caption{Typical Romano load balancing process with large number of moves.}
 \label{proc}
 \end{figure}
+
 \figurename~\ref{proc} shows an example of latency changes for a single test case.
 It is shown that most critical balancing is done within the first couple of moves.
 %\nohhyun{5.4  About the pseudocode, why is D removed from the list when a virtual disk is assigned to it?  Can’t a data store handle more than one virtual disk depending on its performance characteristics?}
