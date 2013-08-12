@@ -3,7 +3,7 @@
 
 \begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{c|X||c|X}
+\begin{tabularx}{0.9\textwidth}{c|X||c|X}
 \hline
 $W$     & Workload                      & $M_W$   & Workload Model \\ \hline
 $S$     & Data Store                    & $M_S$   & Data Store Model \\ \hline
@@ -11,23 +11,25 @@ $P$     & Performance(Latency)          & $M_P$   & Performance Model(Prediction
 $\RAND$ & Random \%                     & $\READ$ & Read \% \\ \hline
 $\SIZE$ & IO size                       & $\OIO$  & Outstanding IO \\ \hline
 \end{tabularx}
-\caption{Variables defined in used to describe \romano Performance Model.}
+\captionsetup{format=myformat}
+\caption{Variables defined in used to describe Storage Performance Model.}
 \label{terminology}
 \end{table}
 
-\romano Performance Model predicts the performance of a workload on a given data store. 
-Before describing \romano Performance Model in detail we define a few variables in \tablename~\ref{terminology} to help describe our model.
+Storage Performance Model predicts the performance of a workload on a given data store. 
+Before describing Storage Performance Model in detail we define a few variables in \tablename~\ref{terminology} to help describe our model.
 
-\section{\romano Performance Model Framework}
+\section{Storage Performance Model Framework}
 
 \begin{figure}[!t]
 \centering
 \input{figure/performance_model_framework}
-\caption{\romano Performance Model framework.}
+\captionsetup{format=myformat}
+\caption{Storage Performance Model framework.}
 \label{rpm}
 \end{figure}
 
-\figurename~\ref{rpm} outlines how the \emph{\romano Performance Model} is generated and maintained.
+\figurename~\ref{rpm} outlines how the \emph{Storage Performance Model} is generated and maintained.
 The edges in \figurename~\ref{rpm} represents the following procedure.\
 \begin{enumerate}
 \item The test vector is run on data stores.
@@ -39,7 +41,7 @@ The edges in \figurename~\ref{rpm} represents the following procedure.\
 \end{enumerate}
 In this section we will describe and justify each step of the process involved in generating the performance model~($M_P$).
 
-\paragraph{The Goal}
+\subsection{The Goal}
 A system's performance is mainly determined by the system itself and its workload.
 Therefore, there should exist a function, $f_P$, that can map a given data store~($S$) and workload~($W$) onto performance~($P$).
 \begin{equation}
@@ -51,9 +53,9 @@ Therefore, we assume the form of $f_P$ to be some linear combination shown in Eq
 \begin{equation} \label{rlm}
 P = M_W M_S+\epsilon = M_P+\epsilon
 \end{equation}
-The goal of \emph{\romano Performance Model} is to derive $M_W$ and $M_S$ such that resulting $M_P$ is as close to the actual $P$ as possible.
+The goal of \emph{Storage Performance Model} is to derive $M_W$ and $M_S$ such that resulting $M_P$ is as close to the actual $P$ as possible.
 
-\paragraph{The Problem}
+\subsection{The Problem}
 Since we can measure $P$, we need to determine $M_W$ to solve the Equation~\ref{rlm} for $M_S$.
 Once $M_W$ is defined, we can use linear regression to derive $M_S$.
 Without the knowledge about the true distribution of $\epsilon$, we assume it to be Gaussian and solve for $M_S$ by:
@@ -69,7 +71,7 @@ VMware ESXi 5.0 already collects read ratio~($\READ$), average request size~($\S
 We implement a mechanism to collect one more characteristic to measure amount of seeks~($\RAND$) since it is well known that randomness of IO has large effect on storage performance.
 The problem is now reduced to finding a good $M_W$ from $\RAND$, $\READ$, $\SIZE$ and $\OIO$ such that $\epsilon$ is minimized.
 
-\paragraph{Test Vector}
+\subsection{Test Vector}
 To investigate how $M_W$ can be derived from $\RAND$, $\READ$, $\SIZE$ and $\OIO$, we first define the space of all possible workloads in terms of those characteristics.
 \begin{align}
 \mathit{random\%} (\RAND) = \{r|r \in \mathbb{I}, 0\le r \le 100\} \\
@@ -101,15 +103,16 @@ The sampling technique that would provide a reasonable model with minimum testin
 
 We generate our test vector using Iometer~\cite{sievert:2004}.
 
-\paragraph{Workload Model}
+\subsection{Workload Model}
 How to describe an IO workload in a generic manner is an open question~\cite{liu:2008, wang:2004, kavalanekar:2008, tarasov:2012}.
-Unlike Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011}, \romano generates a separate $M_W$ for each data store.
+Unlike Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011}, our model generates a separate $M_W$ for each data store.
 While it is tempting to derive $M_W$ in a data store independent manner, we found the resulting performance model~($M_P$) to be neither robust nor accurate.
 This is because each data store interacts with the characteristics of the workload in a different manner.
 \begin{figure}[!t]
 \centering
 \subfloat[E1]{\label{fig:E1read}\includegraphics[width=0.5\textwidth]{figure/emc-3disk-raid0_basic_8_120s_read_single_var.pdf}}
 \subfloat[N2]{\label{fig:N2read}\includegraphics[width=0.5\textwidth]{figure/srs7diskfc_netapp_basic_8_120s_read_single_var.pdf}}
+\captionsetup{format=myformat}
 \caption{Effect of \emph{read\%} variation on the \emph{latency} of E1 and N2 data stores.
 Each line represent latency~($P$) vs. read\%~($\READ$) while other parameters($\OIO$, $\SIZE$ and $\RAND$) are fixed.
 The effect of $\READ$ on E1 is much more predictable(therefore significant) than N2.
@@ -118,7 +121,7 @@ The effect of $\READ$ on E1 is much more predictable(therefore significant) than
 \end{figure}
 \begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X|
   >{\centering} X|
   >{\centering} X|
@@ -128,14 +131,15 @@ The effect of $\READ$ on E1 is much more predictable(therefore significant) than
 \hline
 Name    & No. of disks & RAID & Interface & Make \\
 \hline
+\hline
 E1  & 3 & 0 & SATA & EMC \\
 E2  & 6 & 5 & FC   & EMC \\
 N1  & 3 & 5 & SATA & NetApp \\
 N2  & 7 & 6 & FC   & NetApp \\
 \hline
 \end{tabularx}
-%\captionsetup{format=myformat}
-\caption{Summary of test data stores used in \romano testing.}
+\captionsetup{format=myformat}
+\caption{Summary of test data stores used in Storage Performance Model testing.}
 \label{ds}
 \end{table}
 \figurename~\ref{readParam} shows the relationship between $P$ and $\READ$ for two data stores E1 and N2 from \tablename~\ref{ds}.
@@ -154,7 +158,7 @@ To check which of the 15 terms actually have a significant effect on the perform
 
 \begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X|
   >{\centering}X||
   X|
@@ -183,10 +187,10 @@ factor        & p-value & factor        & p-value     \\
 \RAND:\READ:\SIZE:\OIO        & $<$ 2e-16 &           & \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
 \caption{Result of factorial ANOVA with latency as response and characteristics of workload as the treatment.
 Only the factors with p-values less than 0.05 are shown.
-%In \romano, these are defined to be the workload model.
-%With 95\% probability, these factors have a predictable effect on performance.
+With 95\% probability, these factors have a predictable effect on performance.
 }
 \label{p_values}
 \end{table}
@@ -199,10 +203,10 @@ M_W = \begin{bmatrix} \OIO & \RAND*\OIO & \SIZE*\OIO & \RAND*\READ*\OIO & \RAND*
 The resulting $M_W$ accounts for any interactions as well as their significance on a given data store.
 While the cost of the experiment is not cheap, this only has to be done once per data store type in the system.
 
-\paragraph{Data Store Model}
+\subsection{Data Store Model}
 \begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X|
   >{\centering}X||
   X|
@@ -232,7 +236,7 @@ factor                & coefficients  & factor                & coefficients\\
 \RAND:\READ:\SIZE:\OIO  & 2.613e-08     &                       & \\
 \hline
 \end{tabularx}
-%\captionsetup{format=myformat}
+\captionsetup{format=myformat}
 \caption{Data store model~($M_S$) for four test data stores.
 ~($M_S$) is a column vector whose entries are shown in the \emph{coefficients} column of the each data store.}
 \label{smodel}
@@ -245,7 +249,7 @@ The accuracy of $M_S$ depends heavily on the number of data points.
 While initially it can be derived from our test vector, it can be updated from the data collected in production environment to improve its accuracy.
 %A great thing about linear regression is that it can also provide a \emph{prediction interval} based on the observed error distribution.
 
-\paragraph{Performance Model}
+\subsection{Performance Model}
 Finally, we are now ready to calculate $M_P$, which is the prediction of $P$, by taking the cross product of $M_S$ and $M_W$.
 One interesting thing to note from \tablename~\ref{p_values} is that all the factors contain $\OIO$.
 This is because the average latency~($P$) of all data stores are linear to the number of outstanding IOs~($\OIO$).
@@ -272,6 +276,7 @@ Pesto~\cite{gulati:2011} describes the linear relationship between $\OIO$ and $P
 \subfloat[E2]{\includegraphics[width=0.5\textwidth]{figure/emc-6diskfc-sp_basic_8_120s_oio_single_var.pdf}}\\
 \subfloat[N1]{\includegraphics[width=0.5\textwidth]{figure/netapp-3diskata-sp_basic_8_120s_oio_single_var.pdf}}
 \subfloat[N2]{\includegraphics[width=0.5\textwidth]{figure/srs7diskfc_netapp_basic_8_120s_oio_single_var.pdf}}
+\captionsetup{format=myformat}
 \caption{Effect of outstanding IO~($\OIO$) variation~(from 1 to 128) on the latency of test data stores.
 Each line represent latency~($P$) vs. outstanding IO~($\OIO$) while other parameters are fixed.
 Except for the few noise, the relationship is clearly linear for all data stores.
@@ -290,11 +295,11 @@ P=M_P+\epsilon=\mathit{LQslope}*\OIO+\epsilon=M_W'M_S\OIO+\epsilon
 There are two benefits of using Equation~\ref{rpmf:eq} compared with Equation~\ref{rlm}.
 First benefit is that $\OIO$ no longer needs to be modeled.
 This effectively reduces the size of $M_S$ and $M_W$ simplifying the modeling process as well as prediction process.
-The second benefit comes when we derive the \emph{\romano Aggregation Model} which we will describe in next section.
+The second benefit comes when we derive the \emph{Workload Aggregation Model} which we will describe in \CHP~\ref{ROMANO}.
 
-\paragraph{Prediction Interval}
-The most important feature of \romano is that it provides the confidence of its own prediction.
-\romano keeps track of the variance~($\sigma^2$) of $\epsilon$ from which the prediction interval is calculated to be;
+\subsection{Prediction Interval}
+The most important feature of our model is that it provides the confidence of its own prediction.
+The model keeps track of the variance~($\sigma^2$) of $\epsilon$ from which the prediction interval is calculated to be;
 \begin{equation}\label{ci}
 M_P\pm\frac{1.96\sigma}{\sqrt{n}}
 \end{equation}
@@ -307,9 +312,9 @@ To tighten the interval we can do two things.
 First is to reduce the confidence level.
 However this approach may lead to too many bad predictions that could result in bad decision making.
 Another approach is to increase the number of observations.
-In \romano, the performance statistics and the workload characteristics are collected in real time to update the $M_S$ in effort to tighten the prediction interval.
+In our model, the performance statistics and the workload characteristics are collected in real time to update the $M_S$ in effort to tighten the prediction interval.
 
-\paragraph{Stats Collector}
+\subsection{Stats Collector}
 In order to update $M_S$, the \emph{stats collector} collects workload characteristics and performance in real time.
 $P$ is measured at vSCSI layer as the completion time subtracted from time of queueing per request.
 $\READ$ and $\SIZE$ are simply read from IO request attributes.
@@ -321,16 +326,11 @@ The reason for the multiplier is that some workloads exhibit significant varianc
 All stats are averaged and reported to \emph{Resource Manager} at 20 seconds granularity.
 
 \section{Prediction Accuracy}
-This section evaluates the accuracy and the robustness of our performance model.
-Specifically, we use Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011} as the baseline models and assume that the \emph{full factorial linear model} (FFLM) is the ideal case since it uses all possible linear combinations.
-To evaluate the accuracy we use \emph{test vector} and run them against for 4 test data stores (\tablename~\ref{ds}).
-The resulting 6400 latencies are compared against the predictions of 4 techniques.
 
 \begin{table}[!t]
-\small
 \centering
 %\begin{tabular}[t]{l|S S S S}
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X|
   >{\centering} X|
   >{\centering} X|
@@ -339,6 +339,7 @@ The resulting 6400 latencies are compared against the predictions of 4 technique
 }
 \hline
           & Basil     & Pesto     & FFLM        & Proposed      \\
+\hline
 \hline
 Min.      & -27380    & -1.33     & -1669       & -1667   \\
 1st Qu.   & -441.8    & 12.03     & -0.1037     & -8.610    \\
@@ -349,7 +350,7 @@ $|$Mean$|$& 642.4     & 292.5     & 44.43       & 44.34   \\
 Max.      & 6242      & 10590     & 1141        & 1146        \\
 \hline
 \end{tabularx}
-%\captionsetup{format=myformat}
+\captionsetup{format=myformat}
 \caption {Comparison of residuals ($\epsilon$) for different modeling techniques.
 The residuals were aggregated from all four data store models.
 1st Qu. and 2nd Qu. represents 25\% and 75\% quantile values respectively.
@@ -357,6 +358,11 @@ $|$Mean$|$ represents mean of absolute values of residuals.
 Units are in $\mathit{ms}$.}
 \label{residualsAll}
 \end{table}
+
+This section evaluates the accuracy and the robustness of our performance model.
+Specifically, we use Basil~\cite{gulati:2010} and Pesto~\cite{gulati:2011} as the baseline models and assume that the \emph{full factorial linear model} (FFLM) is the ideal case since it uses all possible linear combinations.
+To evaluate the accuracy we use \emph{test vector} and run them against for 4 test data stores (\tablename~\ref{ds}).
+The resulting 6400 latencies are compared against the predictions of 4 techniques.
 
 \tablename~\ref{residualsAll} shows aggregated $\epsilon$ values, the difference between the prediction ($M_P$) and the measurements ($P$), of different modeling techniques.
 The values were aggregated from latency prediction of all four data stores under test (from 6400 data points).
@@ -381,8 +387,8 @@ In short, our proposed model shows 80\% improvement in overall prediction accura
 \section{Prediction Interval}
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.6\columnwidth, clip, trim=0 0.2in 0 0.7in]{figure/prediction_interval2.pdf}
-%\captionsetup{format=myformat}
+\includegraphics[width=0.8\columnwidth, clip, trim=0 0.2in 0 0.7in]{figure/prediction_interval2.pdf}
+\captionsetup{format=myformat}
 \caption{The average latency (over 20 second intervals) observed from
   20 different workloads (running on separate virtual disks) on 4
   different test data stores during 1 hour interval.  The max and min
@@ -417,17 +423,22 @@ On the other hand a higher confidence interval will result in moves that are onl
 
 \begin{figure}[!t]
 \centering
-\subfloat[Measured Relative Latency]{\label{slm}\includegraphics[width=0.33\textwidth]{figure/sorted_latency.pdf}}
-\subfloat[Pesto Prediction - relative]{\label{slp}\includegraphics[width=0.33\textwidth]{figure/pesto_sorted_latency.pdf}}
-\subfloat[Our Prediction - relative]{\label{slr}\includegraphics[width=0.33\textwidth]{figure/romano_sorted_latency.pdf}}
+\subfloat[Measured Relative Latency]{\label{slm}\includegraphics[width=0.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/sorted_latency.pdf}}\\
+\subfloat[Pesto Prediction - relative]{\label{slp}\includegraphics[width=0.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/pesto_sorted_latency.pdf}}\\
+\end{figure}
+\begin{figure}[!t]
+\ContinuedFloat
+\centering
+\subfloat[Our Prediction - relative]{\label{slr}\includegraphics[width=0.7\textwidth, clip, trim=0 0.2in 0in 0.5in]{figure/romano_sorted_latency.pdf}}
+\captionsetup{format=myformat}
 \caption{Sorted normalized latency plot for four test data stores.
 It shows the relative latencies of E1, N1 and N2 compared to E2.
 The 1600 latencies measured from each data store were normalized by E2 and than sorted.
 The y-axis represents the normalized latency and the x-axis represents the sorted index.
 The actual measurements as well as predictions from Pesto and our model are plotted.
-%Pesto assumes a linear performance difference between the workloads so there is only a linear difference between the data stores regardless of the workloads.
-%For the actual measurement, all four lines cross each other, suggesting that data stores are seldom slower than the other data store for all workloads.
-%While Romano does not capture this effect fully, it does capture the most distinct features of real measurements.
+Pesto assumes a linear performance difference between the workloads so there is only a linear difference between the data stores regardless of the workloads.
+For the actual measurement, all four lines cross each other, suggesting that data stores are seldom slower than the other data store for all workloads.
+While Romano does not capture this effect fully, it does capture the most distinct features of real measurements.
 }
 \label{sortedLatency}
 \end{figure}
@@ -439,7 +450,7 @@ Pesto injects a \emph{4KB, random and read-only} workload into the data store to
 Since each data store has a fixed LQ-slope regardless of the workload, running same workloads on multiple data stores will always result in constant ratio equal to the LQ-slope ratio.
 \begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   >{\centering}X|
   >{\centering}X|
   >{\centering}X|
@@ -448,9 +459,11 @@ Since each data store has a fixed LQ-slope regardless of the workload, running s
 \hline
 E1          &   E2      &   N1      &   N2 \\
 \hline
+\hline
 25.798101   & 4.922433  & 16.666000 & 6.753044 \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
 \caption{Pesto LQ-slope of four test data stores.  The units are
   $\mathit{ms/io}$.  According to these slopes, E2 is the fastest data
   store and E1 is the slowest.}
@@ -467,8 +480,9 @@ Therefore, Romano will not make any predictions for those cases with high confid
 
 \begin{figure}[!t]
 \centering
-\subfloat[Pesto]{\label{rdPesto}\includegraphics[width=0.5\textwidth]{figure/error_hist_compare_pesto.pdf}}
-\subfloat[Proposed model]{\label{rdRomano}\includegraphics[width=0.5\textwidth]{figure/error_hist_compare_kromano.pdf}}
+\subfloat[Pesto]{\label{rdPesto}\includegraphics[width=0.6\textwidth, clip, trim=0 0.2in 0in 0.7in]{figure/error_hist_compare_pesto.pdf}}\\
+\subfloat[Proposed model]{\label{rdRomano}\includegraphics[width=0.6\textwidth, clip, trim=0 0in 0.2in 0.7in]{figure/error_hist_compare_kromano.pdf}}
+\captionsetup{format=myformat}
 \caption{Distribution of residuals ($\epsilon$) for Pesto and Romano.
 x-axis is the value of $\epsilon$ in $ms$.
 y-axis is number of occurrences+1.
@@ -484,14 +498,3 @@ On the other hand, our model shows a much more even distribution across the data
 While there are some differences, prediction accuracy of our model is robust against the heterogeneity of data stores.
 Furthermore, the model's prediction interval further improves its robustness by generating larger interval for the data stores that are difficult to model.
 In short, proposed techinique provides robust and adaptive models across the heterogeneous data stores with a single framework.
-%The justification was that except for the few extreme cases, \emph{``the variation of LQ-slope was limited to 15\%''}.
-
-%assumes
-%that the data stores only differ in terms of their capability to
-%handle the outstanding IOs represented by latency increase per
-%outstanding IO(\emph{LQ slope}). Romano assumes that each data store
-%is affected by different components of workload characteristics in
-%different ways as shown in \tablename~\ref{smodel}.
-
-%\nohhyun{Figure 7:  The virtual disk labels should not be large random numbers.  Why not call them vdisk1, vdisk2,…?}
-

@@ -1,40 +1,65 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% conclusion.tex:
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Conclusion and Discussion}
 \label{CONCLUSION}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We have presented Romano, a load balancing framework for virtual disks
-on heterogeneous storage systems. The kernel of Romano is a performance
-predictor given a set of parameters that characterize the workloads and
-the storage devices. We have shown that Romano can outperform
-previous systems with same goals by up to 80\% in prediction
-accuracy. This increased accuracy results in 78\% reduction in maximum
-latency observed and 82\% reduction in variance while load balancing.
 
-At a deeper level, Romano contributes a recognition that there is
-inherent noise in storage system performance that is not easily dealt
-with. Romano is capable of capturing this noise within the prediction
-interval. As more data is gathered there is higher confidence that the
-prediction interval will contain the measured latency. 
+\section{Summary}
+In this thesis, we have shown that utilizing statistical tools allow us to analyze and design storage systems in a workload dependent manner. 
+Rather than trying to find one or few points in the workload space that are representative, quantitative description of the workload and its interaction with the system provides not only insight into the complex and stateful system but also allow us to design a system that is more robust and efficient. 
 
-Another key contribution of Romano is quantification of effect of
-various workload characteristics and their interaction on heterogeneous
-storage devices. 
+To quantify the interaction between the workload and the system using synthetic workloads, we have shown that it is better to use a single benchmark with better controlled input vector than to use different benchmark programs. 
+One technique called PB method was shown to generate an efficient input vector of size linear to the number of parameters with an assumption that all parameters have a monotonic effect on the performance.
+Such dramatic decrease in the input vector size allows user to repeat experiments to increase confidence of the experiment.
+
+It is also shown that 2 to 4 input parameters are capable of covering the majority of storage system's operational space. 
+This counter intutive result shows that we can further reduce the size of the input vector, allowing us to run more exhaustive experiments to gain more that the first order effects. 
+
+We used such technique to create a storage performance model.
+A full-factorial linear regression is performed using only 4 parameters.
+The resulting model is surprisingly accurate for static workloads.
+More importantly, the model is well behaved. 
+We show that misprediction falls closely to the target confidence level. 
+
+The main benefits of the proposed model is ease with which the model could be updated with the performance data monitored at runtime, ability to trade the confidence interval with statistical significance and generality of the method. 
+
+Based on the model we have designed a load balancing mechanism, called Romano, for virtualized environment with heterogeneous workloads and storage systems.
+We have shown that Romano can outperform previous systems with same goals by up to 80\% in prediction accuracy. This increased accuracy results in 78\% reduction in maximum latency observed and 82\% reduction in variance while load balancing.
+
 We have shown that the performance differences between data stores cannot be described with a single number. More specifically, we have shown that the storage performance must be described in terms of the workload.
 
 The last contribution follows the second contribution. Since the performance of storage systems effectively change with the workload, the load balancing problem is no longer a bin-packing problem as previously believed. 
 Therefore we present a probabilistic approach to finding a pseudo-optimal mapping of workloads to the data stores. 
 It is important to mention that probabilistic approach is only used to find the final state of the system and the moves are actually made greedily to speed up the convergence and minimize the number of moves that has to be made.
 
-We believe that Romano not only provides means for more efficient load
-balancing but also in many other areas such as QoS management, power management and performance tunning in tiered storage.
+We believe that Romano not only provides means for more efficient load balancing but also in many other areas such as QoS management, power management and performance tunning in tiered storage.
 
-Whereas Romano raises the bar on the accuracy of practical modeling
-techniques, there remain ample opportunities for improvements in
-future work. Better interference modeling between workloads when they
-are placed on same data store is one such area where we are making
-good progress. Another work in progress is to come up with a better
-set of workload characteristics such that the workload description can
-be more complete.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+If the system-workload interaction is simple enough for a given metric, we can gain a much more precise result by analytical model of underlying interaction.
+We demonstrate such model of compression ratio by analyzing how the data deduplication system interacts with the backup workloads. 
+By simply analyzing how the unique segments are generated and converted to duplicate segments, we were able to improve the prediction accuracy by as much as 80\% compared to simple method using \emph{average data change rate}.
+Furthermore, because the throughput of the deduplication systems linearly depends on the compression ratio, we were able to get insights into the potential future throughput as well. 
+
+In this dissertation, we have evaluated techniques to parametrize workload characteristics in terms of how it affects the system behavior. 
+We have shown that the correct parameterization simplifies the system response model allowing easier online updates of the model.
+These models are capable of predicting future behavior of the system allowing system administrators to simulate system changes without actually making changes.
+Furthermore, deterministic nature of the models allow programs to simulate changes and optimize the system for a given goal. 
+
+\section{Future Work}
+\subsection{Characterizing Dynamic Behavior of the Workload}
+In this work, we have characterized static workload characteristics and observed how it is varied over time. 
+The interaction between the system and the static workload is modeled which is simply applied to time series of of the characteristics to estimate the performance. 
+We assume that by carefully choosing workload characterization parameters the effect of statefullness allowing a memoryless model to predict the system performance. 
+However, in reality we know that this does not always work. 
+For example, the garbage collection pattern in solid state disks~\cite{agrawal:2008} or content addressable storage~\cite{ungureanu:2010} cannot be described using memoryless model. 
+Furthermore, the workload themselves have shown to have a long memory process properties~\cite{gomez:2000} and does not render itself easily to such models.
+
+We have initially evaluated means to capture time domain properties as well as spatial domain properties by evaluating entropy rates.
+The technique is similar to \emph{PQRS}~\cite{wang:2004} but allows dynamic characterization at run time. 
+
+The goal would be to able to generate workloads of some duration given a set of characteristics parameters.
+
+\subsection{Locality Characterization}
+One of the key performance determinant in a storage system is how the workload interacts with its cache.
+With reducing cost of SDRAM and NAND flash, cache sizes of over $1/1000$th of underlying storage system is becoming viable. 
+We have found that the block accessed at time $t$ have a very low probability of being accessed again before $t+\delta t$ for some $\delta t$. 
+However, it is highly likely that the block close to the block access at time $t$ will be accessed with in $\delta t$. 
+Based on the observation, we are evaluating a technique that allows us to predict the effectiveness of the data prefetching through cache block size control. 
+
+

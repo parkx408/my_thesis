@@ -21,25 +21,36 @@
 % 3. application of such model in VM IO load balancing. 
 % 4. application of such model in Backup Application.
 % 5. application of such model in Storage level cache. 
-
+\section{Current State of Practice}
+Storage system behavior is harder to predict and model than almost any other components in the computer system. 
+This is believed to be due to the statefulness of the system, complexity of the IO stack and heterogeneity in the underlying technology such as magnetic disks and flash memory.
+However, we believe that the main culprit is the unpredictable workload to which the system is being subjected to.
 The current storage systems are designed based on a set of specific workloads. 
 It is assumed that these workloads represents the real workload space.
 Therefore, the optimizations are typically static and designed for a small number of workloads.
 Furthermore, there is no requirement for real time monitoring of worklaods since it is assumed that the entire workload space is already captured. 
 Finally, the performance of two storage systems are compared only within those small set of test vectors and the result is deemed final. 
 
-\nohhyun{Potentially talk about the state of academia and cite few papers as exmaple.} 
+\section{Objectives}
+The goal of this dissertaion is not to provide one system that fits all workloads. 
+Rather, we would like to identify what kind of systems exists in a pool of heterogenous storage systems and direct appropriate workloads to systems that are better suited for the workload.
+More importantly, we would like a sense of what to expect from the system given a workload such that overall progress can be planed. 
+ 
+%Potentially talk about the state of academia and cite few papers as exmaple. 
 
-The goal of this dissertation is to provide means to quantify workload characteristics such that the system can measure workload.
-This allows systems to be designed to dynamically adapt to wider spectrum of workloads.
+The thesis of this dissertation is that to meet these goals we need means to quantify workload characteristics such that the system can measure workload.
+Such characterization allow the mathematical models of the system responses which in turn allows systems to be designed to dynamically adapt to a wider spectrum of workloads.
 Additionally, it allows system comparison to be based on their response characteristics to different workloads rather than a few predefined workloads. 
+Finally, we apply the knowledge of the system response characteristics to predict and if possible improve overall system performance.
 
-\nohhyun{The goal needs to be generic to support the results.}
+%The goal needs to be generic to support the results.
 
+\section{Overview}
 \begin{figure}[!t]
 \centering
 \input{figure/storage_attributes}
-\caption{Storage system operation and attributes.}
+\captionsetup{format=myformat}
+\caption{Storage system operation and attributes. While there are main two operations, there are many attributes of the system that we are interested in.}
 \label{fig:storageAttribute}
 \end{figure}
 
@@ -60,9 +71,6 @@ The performance evaluation of storage systems is a difficult task due to lack of
 
 We propose a method to quickly identify input parameters that have high effect on the performance metric of interest. We also show that using multiple benchmarks is unnecessary at times and a good benchmark can cover all operational space by providing a control over key parameters that affect the performance metric being measured. 
 
-%%%%%%%%%
-%%%%%%%%%
-
 Workload consolidation is a key technique in reducing costs in virtualized datacenters.
 When considering storage consolidation, a key problem is the unpredictable performance behavior of consolidated workloads on a given storage system.
 In practice, this often forces system administrators to grossly overprovision storage to meet application demands.
@@ -74,9 +82,6 @@ It then applies these models to allow highly efficient IO load balancing.
 End-to-end experiments demonstrate that \romano reduces prediction error by 80\% on average compared with existing techniques.
 The result is improved load balancing with lowered variance by 82\% and reduced average and maximum latency observed across the storage systems by 52\% and 78\%, respectively.
 
-%%%%%%%%%
-%%%%%%%%%
-
 The compression and throughput performance of data deduplication system is directly affected by the input dataset. 
 We propose two sets of evaluation metrics, and the means to extract those metrics, for deduplication systems. 
 he First set of metrics represents how the composition of segments changes within the deduplication system over five full backups. 
@@ -86,10 +91,31 @@ We show that, while shorter sequences of unique data may be bad for index cachin
 Finally, we compute the metrics derived from the datasets  under evaluation and show how the datasets perform with different metrics.Our evaluation shows that backup datasets typically exhibit patterns in how they change over time and that these patterns are quantifiable in terms of how they affect the deduplication process.
 This quantification allows us to: 1) decide whether deduplication is applicable, 2) provision resources, 3) tune the data deduplication parameters and 4) potentially decide which portion of the dataset is best suited for deduplication.
 
+\section{Contributions}
+The followings are the contributions of this dissertation.
+
+We provide a statistically rigorous method to differentiate different workloads in terms of the system performance. 
+Specifically, we show that the different storage benchmark program actually cover similar operational spaces. 
+Furthermore, we show that only few benchmark parameters are able to capture over 50\% of system performance variation~\cite{park:2011}. 
+
+We also show that the workload characteristics can be effectively constructed from these parameters as a full factorial combination of these parameters.
+Additionally we show means to minimize number of terms in the characteristics by using Analysis of Variance(ANOVA).
+Finally, we show that such characterization is able to model the performance of storage system with high accuracy even when using simple linear regression~\cite{park:2012}.
+
+We also show how such model can be used to construct a load balancing algorithm for virtualized IO workloads in a heterogeneous storage systems. 
+Algorithm itself is a simple stochastic optimization algorithm known as simulated annealing.
+However, it is able to decrease the worst case average latency of a virtual disk by 70\% and decrease the average latency by 20\%~\cite{park:2012}.
+
+Finally, we show that such technique can be applied to other metrics such as compression ratio and throughpug in the backup workload. 
+Here we apply our knowledge of the system to derive characterization metrics and apply simple regression techniques to derive the model.
+We show that we can predict the compression ratioi and wirte throughput with a high degree of accuracy~\cite{park:2010} as well as read throughput~\cite{nam:2011}.
+
+\section{Organization}
+This dissertation is organized as follows.
 
 \begin{itemize}
 
-\item \CHP~\ref{INTRO} introduces the analytic goals pursued in this thesis.
+\item \CHP~\ref{INTRO} provides the overview and main contributions.
 
 \item \CHP~\ref{BG} prvides a brief overview of the storage systems that are used as part of the experimental platfrom.
 

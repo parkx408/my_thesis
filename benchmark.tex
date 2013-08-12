@@ -4,12 +4,12 @@
 %%The reason storage benchmarking is difficult and what we want to do.
 Storage system performance is one of the most critical factors in meeting overall system performance expectations. 
 The performance variances of typical storage systems today can vary by orders of magnitude~\cite{chen:1993}. 
-It is very easy to get misled by performance numbers without understanding the relationship between the storage workload and its performance variances. 
+It is very easy to get misled by the performance numbers without understanding the relationship between the storage workload and its performance variances. 
 
-Characterizing the workload for storage systems is typically much more complex than it is for processor. 
+Characterizing the workload for storage systems is typically much more complex than it is for the processors. 
 In a simple uni-processor case, it is possible to calculate metrics such as instruction per cycle based on the various cache misses, mis-predictions and number of instructions. 
-However, storage systems typically have a much more state-dependent response. 
-For example, a cache miss does not always result in same penalty, and the service time for a given request depends not only on the  current request but also on all requests in the queue as well as the layout of the data. 
+However, storage systems typically have a much more state-dependent responses. 
+For example, a cache miss does not always result in the same penalty, and the service time for a given request depends not only on the  current request but also on all requests in the queue as well as the layout of the data. 
 Therefore, two very similar workloads may perform very differently since the small differences could force the state transition path into completely different directions. 
 For example, current layout of the data could force a sequential write to become fragmented. 
 This then cause the sequential read of the same data to be slow. 
@@ -45,7 +45,7 @@ It is critical to either define when the system A performs better or show that s
 \subsection{PostMark}
 \begin{table}
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X | 
   >{\centering}X 
   >{\centering\arraybackslash}X
@@ -65,6 +65,7 @@ create\_delete\_ratio &5:5                  &9:1                      \\
 directory\_count      &1                    &1000                     \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
 \caption{PostMark input parameters and input levels assigned to each parameter.}
 \label{pm_param_t}
 \end{table}
@@ -90,10 +91,8 @@ Postmark reports seven performance metrics, \emph{transaction per second} (tps),
  
 \subsection{Flexible IO Tester (FIO)}
 \begin{table}
-\caption{FIO input parameters and input levels assigned to each parameter.}
-\label{fio_param_t}
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   X | 
   >{\centering}X 
   >{\centering\arraybackslash}X
@@ -123,6 +122,9 @@ directio            &false                &true                     \\
 buffer\_alloc       &malloc               &mmap                     \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
+\caption{FIO input parameters and input levels assigned to each parameter.}
+\label{fio_param_t}
 \end{table}
 
 FIO was designed for benchmarking as well as stress/hardware verification~\cite{axboe:2008}. 
@@ -167,7 +169,8 @@ These components are clustered to generate a view of coverage of each benchmark.
 \begin{figure}[!t]
 \centering
 \input{figure/benchmark_experiment}
-\caption{Experiment flow for estimating the parameter effects on performance}
+\captionsetup{format=myformat}
+\caption{Experiment flow for estimating the parameter effects on performance.}
 \label{pb_flow_t}
 \end{figure}
 
@@ -230,15 +233,20 @@ We evaluate the best number of components for clean clustering and determine the
 \subsection{Effects}
 \begin{figure}[!t]
 \centering
-\includegraphics[width=1\textwidth]{figure/pm_effect.png}
-\caption{PostMark parameter effects.}
+\includegraphics[width=0.9\textwidth]{figure/pm_effect.png}
+\captionsetup{format=myformat}
+\caption{PostMark parameter effects. 
+You can see that some parameters have high effect on a particular kind of performance matric while some have high effect on almost all performance matrics.}
 \label{pm_effect}
 \end{figure}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=1\textwidth]{figure/fio_effect.png}
-\caption{FIO parameter effects.}
+\includegraphics[width=0.9\textwidth]{figure/fio_effect.png}
+\captionsetup{format=myformat}
+\caption{FIO parameter effects. 
+Effect of application threading is the most pronounced in this bechmark. 
+However, it will be shown later that the effect of threading can be triggered by other paramters as well.}
 \label{fio_effect}
 \end{figure}
 
@@ -259,11 +267,9 @@ This equate to 4 to 16 experiments for exhaustive evaluation.
 This is a huge improvements over 2048 experiments required for original 12 parameters. 
 Furthermore, it is clear that different input combinations must be tested for each performance metric which must be taken into consideration when benchmarking storage systems. 
 
-\begin{table}
-\caption{PostMark input parameters required to cover at least 50\% of overall effect for each performance metrics reported.}
-\label{pm_50_t}
+\begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   l | 
   X 
   c
@@ -271,33 +277,43 @@ Furthermore, it is clear that different input combinations must be tested for ea
 \hline
 \bfseries Performance Metric   &\bfseries Parameters           &\bfseries Total Effect  \\
 \hline\hline
-tps           & maximum\_file\_size, number\_of\_initial\_files &0.6164   \\
+tps           & maximum\_file\_size                             &0.6164   \\
+              & number\_of\_initial\_files                      &         \\
               & filesystem\_buffer                              &         \\
 \hline
-create\_tps   & maximum\_file\_size, create\_delete\_ratio      &0.5469   \\
+create\_tps   & maximum\_file\_size                             &0.5469   \\
+              & create\_delete\_ratio                           &         \\
 \hline
-read\_tps     & maximum\_file\_size, number\_of\_initial\_files &0.5229   \\
+read\_tps     & maximum\_file\_size                             &0.5229   \\
+              & number\_of\_initial\_files                      &         \\
               & read\_append\_ratio                             &         \\
 \hline
-append\_tps   & minimum\_file\_size, maximum\_file\_size        &0.5418   \\
-              & read\_size, read\_append\_ratio                 &         \\
-\hline
-delete\_tps   & maximum\_file\_size, create\_delete\_ratio      &0.5369   \\
-\hline
-read\_thru    & number\_of\_initial\_files, write\_size         &0.5722   \\
+append\_tps   & minimum\_file\_size                             &0.5418   \\
+              & maximum\_file\_size                             &         \\
+              & read\_size                                      &         \\
               & read\_append\_ratio                             &         \\
 \hline
-write\_thru   & maximum\_file\_size, read\_append\_ratio        &0.5137   \\
+delete\_tps   & maximum\_file\_size                             &0.5369   \\
+              & create\_append\_ratio                           &         \\
+\hline
+read\_thru    & number\_of\_initial\_files                      &0.5722   \\
+              & write\_size                                     &         \\
+              & read\_append\_ratio                             &         \\
+\hline
+write\_thru   & maximum\_file\_size                             &0.5137   \\
+              & read\_append\_ratio                             &         \\
               & create\_delete\_ratio                           &         \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
+\caption{PostMark input parameters required to cover at least 50\% of overall effect for each performance metrics reported.
+The maximum number of parameters required does not exceed 4.}
+\label{pm_50_t}
 \end{table}
 
-\begin{table}
-\caption{FIO input parameters required to cover at least 50\% of overall effect of each performance metrics reported.}
-\label{fio_50_t}
+\begin{table}[!t]
 \centering
-\begin{tabularx}{\textwidth}{
+\begin{tabularx}{0.9\textwidth}{
   l | 
   X 
   c
@@ -305,40 +321,55 @@ write\_thru   & maximum\_file\_size, read\_append\_ratio        &0.5137   \\
 \hline
 \bfseries Performance Metric &\bfseries Parameters &\bfseries Total Effect\\
 \hline\hline
-read        & files\_used, file\_service, posix\_fadvise  &0.5406   \\
-latency     & thread\_count, threads\_same                &         \\
+read\_latency       & files\_used                               &0.5406   \\
+                    & file\_service                             &         \\ 
+                    & posix\_fadvise                            &         \\ 
+                    & thread\_count                             &         \\
+                    & threads\_same                             &         \\
 \hline
-read        & access\_pattern, write\_buffer\_sync        &0.5462   \\
-throughput  & threads\_same                               &         \\
+read\_throughput    & access\_pattern                           &0.5462   \\
+                    & write\_buffer\_sync                       &         \\
+                    & threads\_same                             &         \\
 \hline
-write       & files\_used, file\_service, posix\_fadvise  &0.5060   \\
-latency     & thread\_count, threads\_same                &         \\
+write\_latency      & files\_used                               &0.5060   \\
+                    & file\_service                             &         \\
+                    & posix\_fadvise                            &         \\
+                    & thread\_count                             &         \\
+                    & threads\_same                             &         \\
 \hline
-write       & access\_pattern, thread\_count              &0.5170   \\
-throughput  & threads\_same                               &         \\
+write\_throughput   & access\_pattern                           &0.5170   \\  
+                    & thread\_count                             &         \\ 
+                    & threads\_same                             &         \\
 \hline
 \end{tabularx}
+\captionsetup{format=myformat}
+\caption{FIO input parameters required to cover at least 50\% of overall effect of each performance metrics reported.
+The maximum number of parameters required does not exceed 5.}
+\label{fio_50_t}
 \end{table}
 
 \figurename~\ref{fio_effect} shows the effect of each parameter on four performance metrics measured and \tablename~\ref{fio_50_t} shows list of parameters with the most effect on each performance metric such that sum of the effects exceed 50\%of overall effects. It is interesting to note that the most important parameters for read and write latencies are the same. We can assume that read and write operations themselves do not affect the latency in our system. This can expected, since on HDD, read and write operations do not result in significantly different response time.  Furthermore, we see that the \emph{threads\_same} parameter is important for all metrics. This indicates that the interference between the threads can seriously affect the performance. While the \emph{thread\_count} parameter is also important, the effect on the read throughput is shown to be negligible. Both throughputs are sensitive to the \emph{access\_pattern} which is expected but surprisingly the latency is not. Instead, they are much more sensitive to the \emph{posix\_fadvise} setting. This suggests that latency is not determined by the seek time but rather cache miss penalties. 
 
 \subsection{Coverage of Benchmarks}
+
+
 \begin{figure}[!t]
 \centering
-\subfloat[Read Performance Coverage.]{
-  \centering
-  \includegraphics[width=0.5\textwidth]{figure/Rplot001.png}
-  \label{read_cov}
-}
-\subfloat[Write Performance Coverage.]{
-  \centering
-  \includegraphics[width=0.5\textwidth]{figure/Rplot002.png}
-  \label{write_cov}
-}
-\caption{Performance coverage of of idpendent components of PostMark and FIO.}
-\label{cov}
+\includegraphics[width=0.8\textwidth]{figure/Rplot001.png}
+\captionsetup{format=myformat}
+\caption{Read performance coverage of of independent components of PostMark and FIO.}
+\label{read_cov}
 \end{figure}
-The distance between the independent components as well as their clustering is shown in \figurename~\ref{cov}. 
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/Rplot002.png}
+\captionsetup{format=myformat}
+\caption{Write performance coverage of of independent components of PostMark and FIO.}
+\label{write_cov}
+\end{figure}
+
+The distance between the independent components as well as their clustering is shown in \figurename~\ref{read_cov} and \figurename~\ref{write_cov}. 
 In these graphs, each leaf node represents an independent component. 
 Since the independent components have no physical meaning associated with them, we number them from 1 to 8 per benchmark. 
 We only show the results of 8 components for the brevity. The closer the leaves are on the tree, more similar effect they have on the result. The \emph{height} represents the difference between the subtrees. therefore, evenly spread out components of both benchmark on x-axis suggest similar coverage, while the height of the tree suggest the granularity of the coverage. For example, the FIO component 4 and PostMark component 3 have the similar effect on the read throughput based on the \figurename~\ref{read_cov}. At the same time, FIO component 8 and PostMark component 7 also have similar effect. However, there is a large gap between the two sets of components which are not covered by any of the components as suggested by the \emph{height} of the edges connecting the two subtrees.

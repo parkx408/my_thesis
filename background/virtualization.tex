@@ -8,13 +8,12 @@ In this work, we focus on the storage virtualization where a single storage unit
 
 We have used VMware's VSphere 5.1 as our test platform~\cite{vmware:2013} and will describe how it virtualizes its storage stack in this section.
 
-\subsection{Architecture}
-
 \begin{figure}[!t]
 \centering
-\input{figure/virtualized_io}
-\label{fig:vio}
+\input{figure/bg/virt/virtualized_io}
+\captionsetup{format=myformat}
 \caption{Virtualized IO Stack. The raw SCSI command is remapped to a file operation on VMFS via virtualization layer.}
+\label{fig:vio}
 \end{figure}
 
 \figurename~\ref{fig:vio} outlines high level view of virtualized storage stack.
@@ -37,8 +36,6 @@ Once the translation is complete, the resulting filesystem call is passed to VMF
 Like any filesystem, VMFS translates the filesystem calls to the underlying block device calls which than is translated into the underlying SCSI command through the volume manager. 
 
 The backing storage system can be any device that understands SCSI protocol including FC and SAS. 
-
-\nohhyun{storage IO control}
 
 \subsection{Storage Live Migration}
 One of the main benefits of virtualization is decoupling of underlying Hardware from the execution environment. 

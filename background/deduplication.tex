@@ -12,13 +12,14 @@ Despite these costs, data deduplication has steadily gained its place in backup~
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=3.5in]{figure/dedup/queue}
+\input{figure/bg/dedup/dedup_system}
+\captionsetup{format=myformat}
 \caption{Our simplified deduplication system model. It is essentially 3 server open queuing system. At the content dictionary, C/R of the segments exit the system and 1-C/R of the segments are passed on to content store. All data are assumed to be immediately available at the memory and all three servers have exponentially distributed service time.}
-\label{queue}
+\label{fig:queue}
 \end{figure}
 
 %dedup component
-The deduplication process itself can be divided into largely three parts as shown in \figurename~\ref{queue}. First part of the process generates a sequence of segments from input data stream which we call the \emph{content generator}. In the second phase, the deduplication system generates a dictionary of segments which is in turn used to identify the duplicate segments which we call the \emph{content dictionary}. In the last phase, new segments are stored on a persistent storage system which we call the \emph{content store}. The later two components form a \emph{content addressable storage}(CAS).
+The deduplication process itself can be divided into largely three parts as shown in \figurename~\ref{fig:queue}. First part of the process generates a sequence of segments from input data stream which we call the \emph{content generator}. In the second phase, the deduplication system generates a dictionary of segments which is in turn used to identify the duplicate segments which we call the \emph{content dictionary}. In the last phase, new segments are stored on a persistent storage system which we call the \emph{content store}. The later two components form a \emph{content addressable storage}(CAS).
 
 \subsection{Content Generator}
 The goal of the content generator is to maximize the redundant segments while minimizing the number of segments generated.

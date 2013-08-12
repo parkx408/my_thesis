@@ -1,0 +1,65 @@
+\begin{tikzpicture}[start chain=going right,>=latex,node distance=0pt]
+\node[
+  block,
+  minimum height=1cm,
+  text width=1cm,
+  on chain
+  ] (data) {Data};
+
+\node[
+  node distance = 25pt,
+  rectangle split, 
+  rectangle split parts=4,
+  draw, 
+  rectangle split horizontal,
+  text height=0.5cm,
+  text depth=0.5cm,
+  on chain,
+  inner ysep=0pt] (cgq) {};
+\fill[white] ([xshift=-\pgflinewidth,yshift=-\pgflinewidth]cgq.north west) rectangle ([xshift=-15pt,yshift=\pgflinewidth]cgq.south);
+\node[draw,circle,on chain,minimum size=1cm] (cgs) {$\mu_1$};
+
+\node[
+  node distance = 25pt,
+  rectangle split, 
+  rectangle split parts=4,
+  draw, 
+  rectangle split horizontal,
+  text height=0.5cm,
+  text depth=0.5cm,
+  on chain,
+  inner ysep=0pt] (cdq) {};
+\fill[white] ([xshift=-\pgflinewidth,yshift=-\pgflinewidth]cdq.north west) rectangle ([xshift=-15pt,yshift=\pgflinewidth]cdq.south);
+\node[draw,circle,on chain,minimum size=1cm] (cds) {$\mu_2$};
+
+\node[
+  node distance = 25pt,
+  rectangle split, 
+  rectangle split parts=4,
+  draw, 
+  rectangle split horizontal,
+  text height=0.5cm,
+  text depth=0.5cm,
+  on chain,
+  inner ysep=0pt] (csq) {};
+\fill[white] ([xshift=-\pgflinewidth,yshift=-\pgflinewidth]csq.north west) rectangle ([xshift=-15pt,yshift=\pgflinewidth]csq.south);
+\node[draw,circle,on chain,minimum size=1cm] (css) {$\mu_3$};
+
+\node[
+  node distance = 25pt,
+  block,
+  minimum height=1cm,
+  text width=1cm,
+  on chain
+  ] (done) {Done};
+
+\draw[->] (cgs.east) -- (cdq.west);
+\draw[->] (data.east) -- (cgq.west);
+\draw[->] (cds.east) -- (csq.west) node[align=center, below] {\tiny$1-C/R$};
+\draw[->] (css.east) -- (done.west); 
+\path[->] (cds) edge[out=45, in=135] node[below]{\tiny$C/R$}(done);
+
+\node[align=center,below] at (cgs.south) {Content \\ Generator};
+\node[align=center,below] at (cds.south) {Content \\ Dictionary};
+\node[align=center,below] at (css.south) {Content \\ Store};
+\end{tikzpicture}

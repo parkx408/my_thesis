@@ -2,20 +2,20 @@
 % abstract.tex: Abstract
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-As the underlying technologies for storing digital bits become more diverse, no single management technique fits them all. 
-There is no fundamental differences in their functionality yet their behaviors can be quite different.
-%However, the required fundamental operations for the storage systems have not changed. 
-The differences can largely be categorized into three profiles, the performance profile, the reliability profile and the power profile.  
-
+The underlying technologies for storing digital bits have become more diverse in last decade. 
+There is no fundamental differences in their functionality yet their behaviors can be quite different and no single management technique seems to fit them all. 
+The differences can be categorized based on the metric of interest such as the performance profile, the reliability profile and the power profile.
+ 
 These profiles are a function of the system and the workload assuming that the systems are exposed only to a pre-specified environment. 
-Near infinite workload space makes it infeasible to obtained any of the profiles for any storage systems. 
+Near infinite workload space makes it infeasible to obtain the complete profiles for any storage systems unless the system enforces a discrete and finite profile internally.
 The thesis of this work is that an acceptable approximation of the profiles may be achieved by proper characterization of the workloads. 
+A set of statstical tools as well as understanding of system behavior were used to evaluate and design such characterizations. 
 The correctness of the characterization cannot be fully proved except by showing that the resulting profile can correctly predict any workload and storage system interactions. 
+While this is not possible, we show that we can provide a reasonable confidence in our characterization by statistical evaluation of results. 
 
-The validation of out characterization is validated through hundreds of real world test cases as well as reasonable deductions based on our understanding of the storage systems. 
+The characterizations of this work were applied to compression ratio for backup data deduplication and load balancing of heterogeneous storage systems in a virtualized environments. 
+The validation of our characterization is validated through hundreds of real world test cases as well as reasonable deductions based on our understanding of the storage systems. 
+In both cases, the \emph{goodness} of characterizations were rigourously evaluated using statstical techniques.
 The findings along the validations were both confirming and contradicting of many previous beliefs. 
-
-The characterizations of this work were applied to compression ratio for backup data deduplication, large disk level cache performance and load balancing of heterogeneous storage systems in a virtualized environments. 
-In a world of ever increasing data, the correct characterization can lead to a better utilization, lower system complexity and lower management costs for the large scale storage systems. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

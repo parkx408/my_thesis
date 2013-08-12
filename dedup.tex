@@ -1,9 +1,5 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% simulation.tex: Chapter on MC production:
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Backup Workload and Data Deduplication}
 \label{BW}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 As more and more backup systems opt to take advantage of data deduplication techniques, the variability in performance is becoming an issue. 
 The cause of this variation can be catagorized into two factors, \emph{systemic variation} and \emph{input variation}. Systemic variation is caused by the use of different algorithms and techniques as well as the underlying hardware deployed in the deduplication systems. The input variation is caused by different characteristics of the input datasets. The systemic variation is critical from the deduplication system designers' and vendors' perspectives since it allows them to compare two systems directly. However, the input variation is typically more critical from the custumer's perspective when evaluating the potential benefits of data deduplication for different types of datasets.  
@@ -22,12 +18,15 @@ The throughput of the system is heavily dependent on both system and input facto
 Our main contribution in this paper is to provide a framework to characterize the input dataset for data deduplication systems. We 1) show that different datasets behave with a unique pattern that is quantifiable. Furthermore, we 2) provide analysis on how this pattern affect the deduplication system performance. As part of the framework, we 3) provide classification of segment types and their relations. We further provide parameters to show how the \emph{composition} of these segment types change over time. 
 
 \section{System Components}\label{sys}
-
 %data component
-The input data itself is another system component that affects the performance. To understand how the dataset affects the performance, it is described in terms of how the data components can be separated once it is deduplicated. The segments, regardless of how they are defined, are the smallest units of data in data deduplication. therefore, we define data as a sequence of segments rather than contiguous bits or characters. In this work, we show that the distribution of these different segment types completely describes how the dataset affect the deduplication performance.
+The input data itself is another system component that affects the performance. 
+To understand how the dataset affects the performance, it is described in terms of how the data components can be separated once it is deduplicated. 
+The segments, regardless of how they are defined, are the smallest units of data in data deduplication. 
+Therefore, we define data as a sequence of segments rather than contiguous bits or characters. 
+In this work, we show that the distribution of these different segment types completely describes how the dataset affect the deduplication performance.
 
 \subsection{Queuing Model}
-The system can be viewed as simple open queuing system with three servers as seen in \figurename~\ref{queue}. We make very little assumptions of particular algorithms deployed. However, the functionality of each stage we have just described exists in all conventional deduplication systems. 
+The system can be viewed as simple open queuing system with three servers as seen in \CHP~\ref{BG}. We make very little assumptions of particular algorithms deployed. However, the functionality of each stage we have described in \CHP~\ref{BG} exists in all conventional deduplication systems. 
 In this system, the arrival rate of segments at the \emph{content dictionary} is assumed to be exponentially distributed with the mean of average service rate at the \emph{content generator}. The probability of the arriving segments to be found in the dictionary is equal to the the compression ratio in which case it can by pass the \emph{content store}. If we assume that each outcome is independent, the arrival rate at content store is also exponentially distributed. However, we show that this is not true and is one of the factors that affect the throughput of the system.  
 
 \subsection{Segment Classification}
@@ -35,6 +34,7 @@ In this system, the arrival rate of segments at the \emph{content dictionary} is
 \begin{figure}[!t]
 \centering
 \includegraphics[width=3in]{figure/dedup/seg_classification.jpg}
+\captionsetup{format=myformat}
 \caption{Venn Diagram of Segment Sets. The \emph{logical segments} which is equivalent to the \emph{dataset}, can be grouped into two separate sets $N$ and $C$. The elements of $N$ are segments whose content occurs more than once in the dataset while the elements of $C$ are segments that must be stored in order to ensure no content information is lost from the dataset.}
 \label{seg_class}
 \end{figure}
@@ -58,10 +58,26 @@ The $\mathit{scr}$ obviously represents how much of the data is actually redunda
 
 \section{Description of the Experimental Datasets}\label{dss}
 
+\begin{figure}
+\centering
+\subfloat[exchange]{\label{ex}\includegraphics[width=0.5\textwidth]{figure/dedup/full011}
+}
+\subfloat[exchange\_is]{\label{ei}\includegraphics[width=0.5\textwidth]{figure/dedup/full012}}\\
+\subfloat[exchange\_mb]{\label{em}\includegraphics[width=0.5\textwidth]{figure/dedup/full013}}
+\subfloat[fredp4]{\label{fp}\includegraphics[width=0.5\textwidth]{figure/dedup/full014}}
+\end{figure}
+
+\begin{figure}[!t]
+\ContinuedFloat
+\centering
+\subfloat[fredvar]{\label{fv}\includegraphics[width=0.5\textwidth]{figure/dedup/full015}}
+\subfloat[workstation]{\label{ws}\includegraphics[width=0.5\textwidth]{figure/dedup/full016}}
+\captionsetup{format=myformat}
+\caption{Composition of segments for different datasets. Graphs show how the composition of segments changes over time as weekly full backups are deduplicated.}
+\label{fig_sim}
+\end{figure}
+
 \begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-\caption{Datasets. Six datasets with the size of the logical segment set and two performance metrics of interest.}
-\label{ds_t}
 \centering
 \begin{tabular}{c||c c c}
 \hline
@@ -74,20 +90,14 @@ exchange\_mb 	&1,951,271			&0.973			&27.20			\\
 fredp4		&1,892,285			&0.502			&39.78			\\
 fredvar		&1,922,420			&0.209			&48.36			\\
 workstation		&1,966,577			&0.403			&38.92			\\
-\hline
+\hline  
 \end{tabular}
+\captionsetup{format=myformat}
+\caption{Datasets. Six datasets with the size of the logical segment set and two performance metrics of interest.}
+\label{ds_t}
 \end{table}
 
-Six different datasets shown in \tablename~\ref{ds_t} were used in our evaluation. Due to privacy concerns, only the SHA1, size and the backup order of the segments were made available.\footnote{The actual data provided also contained compressed size of the segment, stream offset which represents where the segment is located in the original dataset. The compressed size is unused since the local compression of segments is not of interest in this study and stream offset is redundant information which can be deduced from the order and the size of the segments.} We refer to this data as \emph{segment trace}. 
-
-The \emph{exchange}, \emph{exchange\_is} and \emph{exchange\_mb} datasets are all Exchange server data encoded in different ways. The \emph{fredp4} dataset contain a revision control system data and \emph{fredvar} contain data from /var directory in the same machine. The \emph{workstation} dataset contains data from the home directories of several users.  
-
-The segment trace is not of the entire original dataset. Unfortunately, the data presented to us were of the data that is truncated from a larger dataset. Although a truncated dataset is used, it does not effect the methodology presented in this paper. This is because we characterize the datasets based on how deduplication system processes them. There are only a specific range of data characteristics from deduplication system's point of view. And these truncated datasets are used to show where in this range a particular dataset may lay. We could easily have done same analysis with the synthetic traces since their characteristics cannot lay outside this range regardless of how we generate the trace. 
-
 \begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-\caption{Experimental deduplication parameters.}
-\label{ex_t}
 \centering
 \begin{tabular}{c|c|| c| c}
 \hline
@@ -109,30 +119,16 @@ Cache Size			&entries			&for Segment ID		&(160 bits)			\\
 Hash Functions 		&				&				&entries			\\
 \hline
 \end{tabular}
+\captionsetup{format=myformat}
+\caption{Experimental deduplication parameters.}
+\label{ex_t}
 \end{table}
 
-\begin{figure*}[!t]
-\centerline{
-\subfloat[Exchange]{\includegraphics[width=2.5in]{figure/dedup/full011}
-\label{ex}}
-\hfil
-\subfloat[Exchange\_is]{\includegraphics[width=2.5in]{figure/dedup/full012}
-\label{ei}}
-\hfil
-\subfloat[Exchange\_mb]{\includegraphics[width=2.5in]{figure/dedup/full013}
-\label{em}}}
-\centerline{\subfloat[fredp4]{\includegraphics[width=2.5in]{figure/dedup/full014}
-\label{fp}}
-\hfil
-\subfloat[fredvar]{\includegraphics[width=2.5in]{figure/dedup/full015}
-\label{fv}}
-\hfil
-\subfloat[workstation]{\includegraphics[width=2.5in]{figure/dedup/full016}
-\label{ws}}
-}
-\caption{Composition of segments for different datasets. Graphs show how the composition of segments changes over time as weekly full backups are deduplicated.}
-\label{fig_sim}
-\end{figure*}
+Six different datasets shown in \tablename~\ref{ds_t} were used in our evaluation. Due to privacy concerns, only the SHA1, size and the backup order of the segments were made available.\footnote{The actual data provided also contained compressed size of the segment, stream offset which represents where the segment is located in the original dataset. The compressed size is unused since the local compression of segments is not of interest in this study and stream offset is redundant information which can be deduced from the order and the size of the segments.} We refer to this data as \emph{segment trace}. 
+
+The \emph{exchange}, \emph{exchange\_is} and \emph{exchange\_mb} datasets are all Exchange server data encoded in different ways. The \emph{fredp4} dataset contain a revision control system data and \emph{fredvar} contain data from /var directory in the same machine. The \emph{workstation} dataset contains data from the home directories of several users.  
+
+The segment trace is not of the entire original dataset. Unfortunately, the data presented to us were of the data that is truncated from a larger dataset. Although a truncated dataset is used, it does not effect the methodology presented in this paper. This is because we characterize the datasets based on how deduplication system processes them. There are only a specific range of data characteristics from deduplication system's point of view. And these truncated datasets are used to show where in this range a particular dataset may lay. We could easily have done same analysis with the synthetic traces since their characteristics cannot lay outside this range regardless of how we generate the trace. 
 
 The system parameters for data deduplication system is described in the \tablename~\ref{ex_t}. The cache size for the \emph{content dictionary} is kept reasonably small to capture the effect of cache misses. Since the maximum raw throughput of the system is IO limited at 50MB/s, you can see that the throughput of different datasets vary from being close to the maximum throughput to about 50\% of that throughput. 
 
@@ -148,19 +144,18 @@ An obvious and perhaps the most important data characteristic for data deduplica
 
 \subsection {Composition of Segments}
 
-\begin{figure*}[!t]
-\centerline{
-\subfloat[Base segments]{\includegraphics[width=2.5in]{figure/dedup/full005}
+\begin{figure}[!t]
+\centering
+\subfloat[Base segments]{\includegraphics[width=0.5\textwidth]{figure/dedup/full005}
 \label{bs}}
-\hfil
-\subfloat[Duplicate segments]{\includegraphics[width=2.5in]{figure/dedup/full002}
-\label{dups}}
-\hfil
-\subfloat[Average references]{\includegraphics[width=2.5in]{figure/dedup/full009}
-\label{ar}}}
+\subfloat[Duplicate segments]{\includegraphics[width=0.5\textwidth]{figure/dedup/full002}
+\label{dups}}\\
+\subfloat[Average references]{\includegraphics[width=0.5\textwidth]{figure/dedup/full009}
+\label{ar}}
+\captionsetup{format=myformat}
 \caption{Comparison of data sets. Number of references are simply $|D|/|B|$. Therefore, \emph{exchange\_is} and \emph{frep4} show lowest average number of references since their number of base segments increase with the number of duplicate segments. For all other segments, the number of base segments stay relatively steady indicating that same portion of the data is changing over and over again.}
 \label{data_comp}
-\end{figure*}
+\end{figure}
 
 \figurename~\ref{fig_sim} shows how the composition of segments, as defined in \figurename~\ref{seg_class}, changes over time for each dataset at a full backup granularity.  The composition of the segments is quite different for all datasets. In the figure \emph{backup number} represents accumulated number of full backups stored in the system. We make a few observations from the composition.
 
@@ -213,14 +208,16 @@ The logical size, $usr$ and $bgr$ of a dataset completely describes the dataset 
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=2.5in]{figure/dedup/full018}
+\includegraphics[width=0.8\textwidth]{figure/dedup/full018}
+\captionsetup{format=myformat}
 \caption{C/R vs. Throughput. The accumulated compression ratio of each dataset at each full backup is plotted against the throughput for that particular backup window. You can observe that the throughput increases as the accumulated compression ratio decreases even though every full backup is equal in size.}
 \label{compthru}
 \end{figure}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=2.5in]{figure/dedup/full019}
+\includegraphics[width=0.8\textwidth]{figure/dedup/full019}
+\captionsetup{format=myformat}
 \caption{Analysis of C/R vs.throughput. The top left graph shows that while the regression is a good fit, data around throughput value of 40MB/s to 50MB/s tends to out perform expected throughput. Top right graph shows square root of residual error. The backup instance 5, 22 and 29 show a large deviation (from exchange, fredvar and workstation datasets respectively). The lower left graph shows that the residual errors are more or less normally distributed with the exception of 4, 21, 29 (from exchange, exchange\_is and workstation datasets respectively). The lower right graph shows the Cook's distance. Backup instance 5 is less than 0.5 Cook's distance away and can be safely taken into evaluation.} 
 \label{anal}
 \end{figure}
@@ -234,9 +231,6 @@ To quantify this effect, we take look at the deviation of throughput numbers fro
 To evaluate the content dictionary behavior, we first look at the sequential runs of segments. A longer sequence of a run represents a sequential access of content dictionary making it easier for the dictionary cache to be a hit. A \emph{run} is simply a sequence of consecutive segments that are either unique or duplicate segments. We refer to them as a \emph{content run} and \emph{duplicate run} respectively when need to distinguish between them. \tablename~\ref{dev} shows aggregated \emph{run} data. We make following observations.
 
 \begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-\caption{Average Deviation from the expected throughput and their corresponding run length information}
-\label{dev}
 \centering
 \begin{tabular}{c||c c c c}
 \hline
@@ -251,6 +245,9 @@ exchange\_mb 	&-0.722			&7490			&18.6				&13\%			\\
 workstation		&-3.260			&5632			&6.635			&9\%				\\			
 \hline
 \end{tabular}
+\captionsetup{format=myformat}
+\caption{Average Deviation from the expected throughput and their corresponding run length information}
+\label{dev}
 \end{table}
 
 \begin{observation}
@@ -263,11 +260,12 @@ The correlation coefficient of maximum run length and the average deviation is $
 Datasets with high average run length due to many extremely large runs perform worse than cases where the run length are more evenly distributed. 
 \end{observation}
 
-The skewed run length has a negative impact on performance not because of the content dictionary but the content store. While it is obvious that less amount to be stored result in high logical throughput as described earlier, the arrival rate of segments to the content store is also important. In a simple queuing model of \figurename~\ref{queue}. Since the arrival rate at the content store is simply $(1-p)S$ where $S$ is the throughput of the content dictionary and $p$ is content dictionary hit probability. If $p$ was uniformly distributed, that the arrival rate would simply be a function of compression ratio. However, as the skewed distribution of run length shows, $p$ of each segments are highly correlated. The effect is bursty arrivals at the content sore resulting in high queue length and lower throughput as shown in \figurename~\ref{ql}. It is shown that the effect of run length is less pronounced for datasets with higher compression ratio. The \emph{all\_miss} case is the worst case where every segment is sent to the segment store and \emph{rand} is the best case where run length distribution is uniform.
+The skewed run length has a negative impact on performance not because of the content dictionary but the content store. While it is obvious that less amount to be stored result in high logical throughput as described earlier, the arrival rate of segments to the content store is also important. In a simple queuing model, the arrival rate at the content store is simply $(1-p)S$ where $S$ is the throughput of the content dictionary and $p$ is content dictionary hit probability. If $p$ was uniformly distributed, that the arrival rate would simply be a function of compression ratio. However, as the skewed distribution of run length shows, $p$ of each segments are highly correlated. The effect is bursty arrivals at the content sore resulting in high queue length and lower throughput as shown in \figurename~\ref{ql}. It is shown that the effect of run length is less pronounced for datasets with higher compression ratio. The \emph{all\_miss} case is the worst case where every segment is sent to the segment store and \emph{rand} is the best case where run length distribution is uniform.
  
 \begin{figure}[!t]
 \centering
-\includegraphics[width=3in]{figure/dedup/disk_q}
+\includegraphics[width=0.8\textwidth]{figure/dedup/disk_q}
+\captionsetup{format=myformat}
 \caption{Run length vs. compression ratio vs. queue length.}
 \label{ql}
 \end{figure}
@@ -282,9 +280,6 @@ For the given six test datasets, we use $bgr$ and $usr$ of the first three fulls
 For example, the $bgr_1\sim 0.01$ and $usr_1\sim 0.26$ for \emph{workstation} dataset. Since $|L_i|\sim393311$,  we can predict future segment composition given backup number 2 information. \figurename~\ref{pred} shows the graph of the original workstation composition and the graph of predicted composition. Since the parameters were extracted from the backup number 1 and 2, the accuracy of prediction falls as the number of fulls increase. Of course, the accuracy of the prediction itself is also dependent on the dataset and the worst case error was observed in \emph{exchange} dataset where the $\mathit{scr}$ at backup 4 was off by just over 0.02($\sim5\%$ error). This is much better approach than simply observing the compression ratio. For \emph{fredp4} dataset the $dcr$  prediction is off in compression ratio by 0.18 ($\sim36\%$ error).
 
 \begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-\caption{Compression ratio prediction error comparison}
-\label{err}
 \centering
 \begin{tabular}{c||c c}
 \hline
@@ -298,6 +293,9 @@ exchange\_mb 	&0.14\%			&0.20\%				\\
 workstation		&3.61\%			&0.61\%				\\			
 \hline
 \end{tabular}
+\captionsetup{format=myformat}
+\caption{Compression ratio prediction error comparison}
+\label{err}
 \end{table}
 
 \tablename~\ref{err} shows our approach outperforms the tradistional $dcr$ approach in all but exchange\_mb dataset where the error is about the same.
@@ -310,14 +308,15 @@ The analysis of run length suggest that it maybe more beneficial for the through
 
 Last application maybe to adjust buffer sizes at each stage of deduplication based on the run length observed to minimized skewed arrival effect. 
 
- \begin{figure}[!t]
+\begin{figure}[!t]
 \centerline{
-\subfloat[Real Data]{\includegraphics[width=1.9in]{figure/dedup/full016}
+\subfloat[Real Data]{\includegraphics[width=0.5\textwidth]{figure/dedup/full016}
 \label{wo}}
 \hfil
-\subfloat[Predicted Data]{\includegraphics[width=1.9in]{figure/dedup/prediction001}
+\subfloat[Predicted Data]{\includegraphics[width=0.5\textwidth]{figure/dedup/prediction001}
 \label{wp}}
 }
+\captionsetup{format=myformat}
 \caption{The original segment composition of workstation and the predicted values.}
 \label{pred}
 \end{figure}

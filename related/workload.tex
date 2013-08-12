@@ -2,23 +2,23 @@
 
 Characterizing the workload for storage subsystems started as early as 1965 in order to simulate computer system performance~\cite{hutchinson:1965}. 
 For almost two decades, the main focus of the characterization was on the arrival rate of IO requests~\cite{hutchinson:1965, fuchel:1967, reddy:1989}. 
-Hence, a simple queueing model was used to describe storage system behavior~\cite{}. 
+Hence, a simple queueing model was used to describe storage system behavior~\cite{kleinrock:1975}. 
 
 At around the same time, synthetic benchmarks that takes record sizes, number of records, read rate, write rate and number of files became available~\cite{park:1990, wolman:1989}.
 A plateau of works on measuring real workloads in production systems followed~\cite{ruemmler:1993, kavalanekar:2008, ahmad:2007, wang:2009, roselli:2000, calzarossa:1993, smirni:1997, calzarossa:2000, arlitt:1996, riska:2006}. 
-Consequently, comprehensive and complex storage models~\cite{} as well as storage benchmarks followed~\cite{}. 
+Consequently, comprehensive and complex storage models~\cite{anderson:1968,brichet:1996,copeland:1985,freeman:1996,norros:1994} as well as storage benchmarks followed~\cite{traeger:2008}. 
 
 Importance of locality in sub storage systems was shown to be important in the 80's~\cite{ousterhout:1985}. 
 However, the efforts to quantify locality in storage systems have began only recently. 
 Two different approaches exists. 
-One approach relies on the fact that the autocorrelation of LBN sequence tends not to decay exponentially~\cite{}.
-This effect is known as the \emph{long memory} effect and can be quantified using \emph{Hurst exponent}~\cite{}.
-The other approach takes a more traditional approach of \emph{Stack Distance}~\cite{} and \emph{Seek Distance}~\cite{}.
+One approach relies on the fact that the autocorrelation of LBN sequence tends not to decay exponentially~\cite{denning:1972}.
+This effect is known as the \emph{long memory} effect and can be quantified using \emph{Hurst exponent}~\cite{gomez:2000}.
+The other approach takes a more traditional approach of \emph{Stack Distance}~\cite{mattson:1970} and \emph{Seek Distance}~\cite{fox:2008}.
 
 These new ways of describing workloads allows us to gain new insights into the workloads.
 However, previous works have failed to link these new characteristics to the way the workloads interact with storage systems rendering the insights to be somewhat interesting but less useful.
 
-There exists another set of characterization that relies on extracting a set of components from the workload so that the workload can be sythetically generated~\cite{}.
+There exists another set of characterization that relies on extracting a set of components from the workload so that the workload can be sythetically generated~\cite{sreenivasan:1974}.
 Theses techniques typically rely on unintutive parameters that cannot be meaning fully controlled.
 Therefore the application of these characrteristics are limited to replaying a specific trace only.
 
