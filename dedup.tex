@@ -2,17 +2,17 @@
 \label{BW}
 
 As more and more backup systems opt to take advantage of data deduplication techniques, the variability in performance is becoming an issue. 
-The cause of this variation can be catagorized into two factors, \emph{systemic variation} and \emph{input variation}. Systemic variation is caused by the use of different algorithms and techniques as well as the underlying hardware deployed in the deduplication systems. The input variation is caused by different characteristics of the input datasets. The systemic variation is critical from the deduplication system designers' and vendors' perspectives since it allows them to compare two systems directly. However, the input variation is typically more critical from the custumer's perspective when evaluating the potential benefits of data deduplication for different types of datasets.  
+The cause of this variation can be categorized into two factors, \emph{systemic variation} and \emph{input variation}. Systemic variation is caused by the use of different algorithms and techniques as well as the underlying hardware deployed in the deduplication systems. The input variation is caused by different characteristics of the input datasets. The systemic variation is critical from the deduplication system designers' and vendors' perspectives since it allows them to compare two systems directly. However, the input variation is typically more critical from the customer's perspective when evaluating the potential benefits of data deduplication for different types of datasets.  
 
 Current metrics for characterizing the datasets for data deduplication are overly simplified and often inaccurate. For example, the compression ratio ($\mathit{CR}$) is typically estimated using the \emph{average data change rate} ($\overline{\mathit{dcr}}$), which is the percentage of data change. Let $R$ be the required retention period. Assuming a full backup per unit time, the compression ratio is simply: 
 \begin{equation}\label{dcr_est}
 \mathit{CR}= \frac{\mathrm{Compressed\ Size}}{\mathrm{Uncompressed\ Size}}=\frac{1+(R-1)\cdot \overline{\mathit{dcr}}}{R}. 
 \end{equation}
-This model provides a simple estimation of the ompression ratio but it can also be very inaccuarate. We observed over 35\% error using the $\overline{\mathit{dcr}}$ to charaterize one of our datasets. One of our main contributions is providing a new set of metrics and models that allow much more accurate compression performance predictions to be made. In five out of six cases we test, the error reduction was over 50\% when compared with the $\overline{\mathit{dcr}}$ method.  
+This model provides a simple estimation of the compression ratio but it can also be very inaccurate. We observed over 35\% error using the $\overline{\mathit{dcr}}$ to characterize one of our datasets. One of our main contributions is providing a new set of metrics and models that allow much more accurate compression performance predictions to be made. In five out of six cases we test, the error reduction was over 50\% when compared with the $\overline{\mathit{dcr}}$ method.  
 
 The main performance metrics for data deduplication systems are the compression ratio and the read/write throughput. While the latency could also be an issue for virtual machines, it can be mostly masked by high level caching and prefetching mechanisms. Unless specified otherwise, we use the term \emph{performance} to represent both the throughput and compression together. 
 
-The throughput of the system is heavily dependent on both system and input factors. Thus, it is difficult to determine if one dataset outperforms the other in terms of throughput. However, there are features of datasets that are likely to benefit throughput in most systems. One obvious one is the compression ratio itself. A highly compressable dataset has lower IO requirements which in turn improves the throughput in most systems. The compression ratio is the most influential factor in determining the throughput. However, there are also other factors, such as spatial locality of the data segments and bursty arrival rates, which we examine in this paper. 
+The throughput of the system is heavily dependent on both system and input factors. Thus, it is difficult to determine if one dataset outperforms the other in terms of throughput. However, there are features of datasets that are likely to benefit throughput in most systems. One obvious one is the compression ratio itself. A highly compressible dataset has lower IO requirements which in turn improves the throughput in most systems. The compression ratio is the most influential factor in determining the throughput. However, there are also other factors, such as spatial locality of the data segments and bursty arrival rates, which we examine in this paper. 
 
 %%Contribution
 Our main contribution in this paper is to provide a framework to characterize the input dataset for data deduplication systems. We 1) show that different datasets behave with a unique pattern that is quantifiable. Furthermore, we 2) provide analysis on how this pattern affect the deduplication system performance. As part of the framework, we 3) provide classification of segment types and their relations. We further provide parameters to show how the \emph{composition} of these segment types change over time. 
@@ -27,7 +27,7 @@ In this work, we show that the distribution of these different segment types com
 
 \subsection{Queuing Model}
 The system can be viewed as simple open queuing system with three servers as seen in \CHP~\ref{BG}. We make very little assumptions of particular algorithms deployed. However, the functionality of each stage we have described in \CHP~\ref{BG} exists in all conventional deduplication systems. 
-In this system, the arrival rate of segments at the \emph{content dictionary} is assumed to be exponentially distributed with the mean of average service rate at the \emph{content generator}. The probability of the arriving segments to be found in the dictionary is equal to the the compression ratio in which case it can by pass the \emph{content store}. If we assume that each outcome is independent, the arrival rate at content store is also exponentially distributed. However, we show that this is not true and is one of the factors that affect the throughput of the system.  
+In this system, the arrival rate of segments at the \emph{content dictionary} is assumed to be exponentially distributed with the mean of average service rate at the \emph{content generator}. The probability of the arriving segments to be found in the dictionary is equal to the compression ratio in which case it can by pass the \emph{content store}. If we assume that each outcome is independent, the arrival rate at content store is also exponentially distributed. However, we show that this is not true and is one of the factors that affect the throughput of the system.  
 
 \subsection{Segment Classification}
 
@@ -110,7 +110,7 @@ Average			&8KB				&Maximum			&16KB			\\
 Segment Size		&				&Segment Size		&				\\
 \hline
 Storage Maximum	 	&50MB/s 			&Maximum Network	&100MB/s			\\
-Throughput (sequentual)	& 				&Throughput		&				\\
+Throughput (sequential)	& 				&Throughput		&				\\
 \hline
 Content Dictionary		&100,000			&Hash Function		&SHA1			\\
 Cache Size			&entries			&for Segment ID		&(160 bits)			\\
@@ -275,7 +275,7 @@ The run length analysis shows that while the throughput is highly correlated wit
 \section{Applications}\label{appp}
 Above analysis of composition of segments allows users of deduplication systems to collect specific statistics to predict future storage requirements. In the world of deduplication where the physical storage space and the logical segment space does not match, it is difficult to provision storage space. Extracting $bgr$ and $usr$ from the deduplicated data allow users to better predict future storage requirements. 
 
-For the given six test datasets, we use $bgr$ and $usr$ of the first three fulls to predict the comression ratio of 4th and 5th full and compare them with the $dcr$ approach.
+For the given six test datasets, we use $bgr$ and $usr$ of the first three fulls to predict the compression ratio of 4th and 5th full and compare them with the $dcr$ approach.
 
 For example, the $bgr_1\sim 0.01$ and $usr_1\sim 0.26$ for \emph{workstation} dataset. Since $|L_i|\sim393311$,  we can predict future segment composition given backup number 2 information. \figurename~\ref{pred} shows the graph of the original workstation composition and the graph of predicted composition. Since the parameters were extracted from the backup number 1 and 2, the accuracy of prediction falls as the number of fulls increase. Of course, the accuracy of the prediction itself is also dependent on the dataset and the worst case error was observed in \emph{exchange} dataset where the $\mathit{scr}$ at backup 4 was off by just over 0.02($\sim5\%$ error). This is much better approach than simply observing the compression ratio. For \emph{fredp4} dataset the $dcr$  prediction is off in compression ratio by 0.18 ($\sim36\%$ error).
 
@@ -298,7 +298,7 @@ workstation		&3.61\%			&0.61\%				\\
 \label{err}
 \end{table}
 
-\tablename~\ref{err} shows our approach outperforms the tradistional $dcr$ approach in all but exchange\_mb dataset where the error is about the same.
+\tablename~\ref{err} shows our approach outperforms the traditional $dcr$ approach in all but exchange\_mb dataset where the error is about the same.
 
 Another potential application is evaluating the impact of merging two separately deduplicated data. Unless there is a reason to suspect a large similarity between the two datasets, parameters of each dataset can be superpositioned to predict the composition of combined dataset. 
 

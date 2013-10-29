@@ -255,7 +255,7 @@ One interesting thing to note from \tablename~\ref{p_values} is that all the fac
 This is because the average latency~($P$) of all data stores are linear to the number of outstanding IOs~($\OIO$).
 Note that it also means that $P$ is not linear to $\RAND$, $\READ$ and $\SIZE$.
 
-We have tested 12 different data stores and verified that the linear relatioship between the outstanding IOs and the latencies hold.
+We have tested 12 different data stores and verified that the linear relationship between the outstanding IOs and the latencies hold.
 %Let us denote the element of $M_S$ that corresponds to an element of $M_W$ as $M_{S,W}$.
 %For example, $M_{S=E1,\OIO}=1.064$ which is the coefficient corresponding to $\OIO$ in \tablename~\ref{smodel} for data store E1.
 Therefore, we can rewrite Equation~\ref{msSolve} as;
@@ -443,7 +443,7 @@ While Romano does not capture this effect fully, it does capture the most distin
 \label{sortedLatency}
 \end{figure}
 
-In this section, we evaluate the models's ability to handle heterogeneous data stores using Pesto~\cite{gulati:2011} as the baseline.
+In this section, we evaluate the model's ability to handle heterogeneous data stores using Pesto~\cite{gulati:2011} as the baseline.
 Basil is not compared here since it only generates a single model across the data stores and can not handle heterogeneity.
 Pesto injects a \emph{4KB, random and read-only} workload into the data store to derive the \emph{LQ-slope} for a given data store.
 \tablename~\ref{pestolq} shows the Pesto LQ-slope of four test data stores.
@@ -497,4 +497,4 @@ As the new data stores are introduced into the storage pool, the applicability o
 On the other hand, our model shows a much more even distribution across the data stores in \figurename~\ref{rdRomano}.
 While there are some differences, prediction accuracy of our model is robust against the heterogeneity of data stores.
 Furthermore, the model's prediction interval further improves its robustness by generating larger interval for the data stores that are difficult to model.
-In short, proposed techinique provides robust and adaptive models across the heterogeneous data stores with a single framework.
+In short, proposed technique provides robust and adaptive models across the heterogeneous data stores with a single framework.

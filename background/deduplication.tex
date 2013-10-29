@@ -4,7 +4,7 @@
 Data deduplication provides a means to efficiently remove redundancies from large datasets.
 This process is made possible by first dividing up the data into segments and representing each segment with a much smaller hash value.
 A redundant segment of data is then easily identified through a hash table lookup.
-The efficiency of the process comes at the cost of possible data loss through hash collisions, thoug it is understood that the collision probability is negligible compared to the soft error rate of the storage system if an appropriate hash function is used~\cite{aronovich:2009, zhu:2008, bobbarjung:2006, muthitacharoen:2001}.
+The efficiency of the process comes at the cost of possible data loss through hash collisions but it is understood that the collision probability is negligible compared to the soft error rate of the storage system if an appropriate hash function is used~\cite{aronovich:2009, zhu:2008, bobbarjung:2006, muthitacharoen:2001}.
 Another performance factor is the granularity of compression which is limited to the size of duplicate segments.
 Two segments that are off by a single bit will result in no compression.
 
