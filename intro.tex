@@ -28,15 +28,15 @@ However, we believe that the main culprit is the unpredictable workload to which
 The current storage systems are designed based on a set of specific workloads. 
 It is assumed that these workloads represents the real workload space.
 Therefore, the optimizations are typically static and designed for a small number of workloads.
-Furthermore, there is no requirement for real time monitoring of worklaods since it is assumed that the entire workload space is already captured. 
+Furthermore, there is no requirement for real time monitoring of workloads since it is assumed that the entire workload space is already captured. 
 Finally, the performance of two storage systems are compared only within those small set of test vectors and the result is deemed final. 
 
 \section{Objectives}
-The goal of this dissertaion is not to provide one system that fits all workloads. 
-Rather, we would like to identify what kind of systems exists in a pool of heterogenous storage systems and direct appropriate workloads to systems that are better suited for the workload.
+The goal of this dissertation is not to provide one system that fits all workloads. 
+Rather, we would like to identify what kind of systems exists in a pool of heterogeneous storage systems and direct appropriate workloads to systems that are better suited for the workload.
 More importantly, we would like a sense of what to expect from the system given a workload such that overall progress can be planed. 
  
-%Potentially talk about the state of academia and cite few papers as exmaple. 
+%Potentially talk about the state of academia and cite few papers as example. 
 
 The thesis of this dissertation is that to meet these goals we need means to quantify workload characteristics such that the system can measure workload.
 Such characterization allow the mathematical models of the system responses which in turn allows systems to be designed to dynamically adapt to a wider spectrum of workloads.
@@ -73,8 +73,8 @@ We propose a method to quickly identify input parameters that have high effect o
 
 Workload consolidation is a key technique in reducing costs in virtualized datacenters.
 When considering storage consolidation, a key problem is the unpredictable performance behavior of consolidated workloads on a given storage system.
-In practice, this often forces system administrators to grossly overprovision storage to meet application demands.
-In this paper, we show that existing modeling techniques are inaccurate and ineffective in the face of heterogenous devices.
+In practice, this often forces system administrators to grossly over-provision storage to meet application demands.
+In this paper, we show that existing modeling techniques are inaccurate and ineffective in the face of heterogeneous devices.
 We introduce {\em\romano}, a storage performance management system designed to optimize truly heterogeneous virtualized datacenters.
 At its core, \romano constructs and adapts approximate workload-specific performance models of storage devices automatically, along with prediction intervals.
 It then applies these models to allow highly efficient IO load balancing.
@@ -92,6 +92,13 @@ Finally, we compute the metrics derived from the datasets  under evaluation and 
 This quantification allows us to: 1) decide whether deduplication is applicable, 2) provision resources, 3) tune the data deduplication parameters and 4) potentially decide which portion of the dataset is best suited for deduplication.
 
 \section{Contributions}
+Some of the findings in the work validates many of the previous techniques.
+We show that the use of synthetic benchmarks is a valid technique to evaluate the performance is a given storage system under different workloads. 
+We also show that some of the well known characteristics such as randomness and IO size are indeed a key characteristics that affect the performance. 
+However, we also invalidate some of the traditional techniques. 
+Especially, we show that the effects of the workload on different types of storage systems are non-linear and it no longer makes sense to define a storage system performance as a scalar. 
+The result of this finding invalidates the techniques that compares two storage systems based on few performance measurements using synthetic benchmarks.
+ 
 The followings are the contributions of this dissertation.
 
 We provide a statistically rigorous method to differentiate different workloads in terms of the system performance. 
@@ -106,9 +113,9 @@ We also show how such model can be used to construct a load balancing algorithm 
 Algorithm itself is a simple stochastic optimization algorithm known as simulated annealing.
 However, it is able to decrease the worst case average latency of a virtual disk by 70\% and decrease the average latency by 20\%~\cite{park:2012}.
 
-Finally, we show that such technique can be applied to other metrics such as compression ratio and throughpug in the backup workload. 
+Finally, we show that such technique can be applied to other metrics such as compression ratio and throughput in the backup workload. 
 Here we apply our knowledge of the system to derive characterization metrics and apply simple regression techniques to derive the model.
-We show that we can predict the compression ratioi and wirte throughput with a high degree of accuracy~\cite{park:2010} as well as read throughput~\cite{nam:2011}.
+We show that we can predict the compression ratio and write throughput with a high degree of accuracy~\cite{park:2010} as well as read throughput~\cite{nam:2011}.
 
 \section{Organization}
 This dissertation is organized as follows.
@@ -117,9 +124,9 @@ This dissertation is organized as follows.
 
 \item \CHP~\ref{INTRO} provides the overview and main contributions.
 
-\item \CHP~\ref{BG} prvides a brief overview of the storage systems that are used as part of the experimental platfrom.
+\item \CHP~\ref{BG} provides a brief overview of the storage systems that are used as part of the experimental platform.
 
-\item \CHP~\ref{TOOL} give highlevel description of the statistical tools used to dentify and quantify various components of the workload and to describe their interations with the system. 
+\item \CHP~\ref{TOOL} give high level description of the statistical tools used to identify and quantify various components of the workload and to describe their interactions with the system. 
 
 \item \CHP~\ref{BENCH} shows means to efficiently compare different benchmark programs ans suggest how they should be used to evaluate storage system performance. 
 
